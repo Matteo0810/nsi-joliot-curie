@@ -1,0 +1,45 @@
+.notification {
+  position: fixed;
+  bottom: 27px;
+  right: 49px;
+
+  border-radius: 20px;
+  padding: 18px 32px;
+
+  background: var(--section-color);
+  box-shadow: 0 0 black;
+
+  animation: notification-on .3s alternate;
+
+  &>h4 {
+    color: var(--text-color);
+    font-size: 17px;
+    font-weight: normal;
+
+    margin-right: 23px;
+  }
+
+  &>span {
+    background: $main;
+    padding: 6px 13px;
+    border-radius: 100px;
+    color: white;
+    font-size: 22px;
+    box-shadow: -1px 2px 6px #7d777745;
+    cursor: pointer;
+  }
+
+  &>* {
+    display: inline-block;
+  }
+
+  @keyframes notification-on {
+    from { right: -326px; }
+    to { right: 49px; }
+  }
+
+  @keyframes notification-off {
+    from { right: 49px; }
+    to { right: -326px; }
+  }
+}

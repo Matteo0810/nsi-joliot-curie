@@ -1,0 +1,87 @@
+@each $font in (
+    montserrat-bold,
+    montserrat-regular,
+    montserrat-medium,
+    montserrat-thin,
+    kaleko-bold, kaleko-light
+) {
+  @font-face {
+    src: url(../fonts/#{$font}.otf);
+    font-family: $font;
+  }
+}
+
+/* COLORS */
+
+$main: #5D49F5;
+$secondary: #382C93;
+$third: #FCFBFF;
+$fourth: #CFCCE5;
+
+$main-filter-color: invert(26%) sepia(87%) saturate(3581%)
+  hue-rotate(241deg) brightness(99%) contrast(94%);
+
+html[data-theme] {
+
+  &[data-theme="dark"] {
+    --background-color: #242B3B;
+    --text-color: white;
+    --section-color: #0D1321;
+    --filter: invert(100%) sepia(7%) saturate(7493%)
+      hue-rotate(291deg) brightness(105%) contrast(112%);
+
+    --theme-background: #242B3B;
+    --welcome-back-color: #E8E8E8;
+  }
+
+  &[data-theme="light"] {
+    --background-color: #F7F7F7;
+    --text-color: #0D1321;
+    --section-color: white;
+    --filter: invert(5%) sepia(7%) saturate(7350%)
+    hue-rotate(188deg) brightness(97%) contrast(95%);
+
+    --theme-background: #F7F7F7;
+    --welcome-back-color: #656565;
+  }
+}
+/* END COLORS */
+
+*,
+*::before,
+*::after {
+  outline: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'montserrat-regular', sans-serif;
+  scroll-behavior: smooth;
+
+  background: var(--background-color);
+  color: var(--text-color);
+
+  display: flex;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+/* IMPORTS */
+@import "utils/_theme";
+@import "utils/_notification";
+@import "utils/_icons";
+
+@import "component/profile";
+@import "component/home";
+
+@import "login";
+/* END IMPORTS */

@@ -1,0 +1,41 @@
+html[data-theme] {
+
+  &[data-theme="dark"] {
+    .themes {
+      &>.light {
+        &>span {
+          color: #AEAEAE !important;
+        }
+
+        &>.icon {
+          filter: invert(74%) sepia(33%) saturate(7%)
+            hue-rotate(4deg) brightness(89%) contrast(89%);
+        }
+      }
+
+      &>.fill {
+        left: 9.6em;
+      }
+    }
+  }
+
+  &[data-theme="light"] {
+    .themes {
+      &>.dark {
+        &>span {
+          color: #AEAEAE !important;
+        }
+
+        &>.icon {
+          filter: invert(74%) sepia(33%) saturate(7%)
+          hue-rotate(4deg) brightness(89%) contrast(89%);
+        }
+      }
+
+      &>.fill {
+        left: 11px;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,25 @@
+.icon {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+  top: 12px;
+
+  background-size: cover !important;
+  background-position: center !important;
+
+  filter: var(--filter);
+
+  display: inline-block;
+  cursor: pointer;
+
+  @each $icon in (
+    "news", "settings", "sun", "moon",
+    "links", "multiple-folders", "sign-out"
+  ) {
+    &.#{$icon} {
+      background: url("../images/icons/#{$icon}.svg");
+    }
+  }
+
+}
