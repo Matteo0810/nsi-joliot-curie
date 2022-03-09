@@ -35,3 +35,64 @@ function validateForm(selector) {
         form[field.getAttribute('name')] = field.value)
     return form
 }
+
+class Alert {
+
+    constructor(title, options = null) {
+        this._title = title
+        this._options = options
+
+        this._show()
+    }
+
+    _hasDescription() {
+        if(this._options.hasOwnProperty('description'))
+            return `<h4>${this._options.description}</h4>`
+        return ''
+    }
+
+    _setActions() {
+        if(this._options.actions) {
+            const actions = this._options.actions.map(({name,className}) =>
+                `<button id="action__${className}" class="action ${className}">${name}</button>`)
+            return `<div class="actions">${actions.join('')}</div>`
+        }
+        return ''
+    }
+
+    _close() {
+        document.querySelector('.alert__modal')
+            .style.animation = ".5s close-modal alternate"
+        setTimeout(() =>
+                document.querySelector('.window__middle').remove()
+            , 4.5e2)
+    }
+
+    _show() {
+        document.body.insertAdjacentHTML('beforeend', `
+            <div class="window__middle">
+                <div class="alert__modal">
+                    <span class="close">&times;</span>
+                    <h1>${this._title}</h1>
+                    ${this._hasDescription()}
+                    ${this._setActions()}
+                </div>
+            </div>
+        `)
+
+        document.querySelector('.close')
+            .addEventListener('click', () =>
+                this._close())
+
+        if(this._options.actions) {
+            this._options.actions.forEach(({className, callback}) => {
+                document.getElementById(`action__${className}`)
+                    .onclick = () => {
+                        callback()
+                        this._close()
+                    }
+            })
+        }
+    }
+
+}

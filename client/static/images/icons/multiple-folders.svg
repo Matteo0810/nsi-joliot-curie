@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="35" height="33.167" viewBox="0 0 35 33.167">
-  <g id="multiple-folders" transform="translate(1 1)">
-    <path id="Tracé_2" data-name="Tracé 2" d="M32.333,9H6.667A3.524,3.524,0,0,0,3,12.361V25.806a3.524,3.524,0,0,0,3.667,3.361H32.333A3.524,3.524,0,0,0,36,25.806V12.361A3.524,3.524,0,0,0,32.333,9Z" transform="translate(-3 2)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-    <path id="Tracé_3" data-name="Tracé 3" d="M6,8.5H28M9.667,3H24.333" transform="translate(-0.5 -3)" fill="none" stroke="#000" stroke-width="2"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9H5C3.89543 9 3 9.82081 3 10.8333V18.1667C3 19.1792 3.89543 20 5 20H19C20.1046 20 21 19.1792 21 18.1667V10.8333C21 9.82081 20.1046 9 19 9Z"/><path stroke="#000" stroke-width="2" d="M6 6H18M8 3H16"/></svg>

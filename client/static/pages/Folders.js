@@ -2,13 +2,56 @@ class Folders extends Component {
 
     constructor() {
         super("/fichiers", "folders", "Fichiers");
+
+        this.state = {
+            id: this.props.id ? this.props.id : 1
+        }
+
+        this.choiceModal = new ChoiceModal()
+    }
+
+    componentWillMount() {
+        document.getElementById('open__choiceModal')
+            .addEventListener('click', () => this.choiceModal.open())
+
+        new FileActions()
     }
 
     async render() {
+        const FILE_ID = this.state.id,
+            { folders } = await getFolder(FILE_ID);
+        let files = folders
+        if(files.length > 0)
+            files = folders.filter(({id}) => id === FILE_ID).pop();
         return `
-            <div>
-            
-            </div>
+            <section class="files__section">
+                <div class="files__list">
+                    <h1>Mes fichiers</h1>
+                    <div class="path">
+                        <a to="/fichiers"><span class="root">Dossier racine</span></a>
+                        <span>&gt;</span>
+                        <a to="/fichiers"><span>test</span></a>
+                    </div>
+                    
+                    <div class="list">
+                        <div id="open__choiceModal">
+                             <span>Ajouter un élément</span>
+                        </div>
+                        ${[...folders, ...files]
+                            .filter(({name}) => name !== 'root')
+                            .map(data => new FileData(data).toFile())
+                            .join('')}
+                    </div>
+                </div>
+                <!--<div class="files__tree">
+                    <div class="folder root">
+                        <span>Dossier racine</span>
+                    </div>
+                    <div class="folder actual">
+                        <span>test</span>
+                    </div>
+                </div>-->
+            </section>
         `
     }
 

@@ -7,7 +7,8 @@ class Router {
     }
 
     async init() {
-        for(let route of [Login, Home, Folders]) {
+        const routes = [Login, Home, Folders, Links, Settings, CodingGame]
+        for(let route of routes) {
             route = new route
             debug(`${route.getName} route with path "${route.getURL}" added`)
             this._routes[route.getURL] = route
@@ -69,10 +70,6 @@ class _Path {
         const url = window.location.href.replace(/\/$/g, '')
             .replace(/\?page=(.*)/g, '')
         return `${url}?page=${this._defaultPath}`
-    }
-
-    getDefaultPath() {
-        return this._defaultPath
     }
 
     getParams() {

@@ -7,8 +7,8 @@ function getTheme() {
     return localStorage.getItem('theme')
 }
 
-if(!getTheme()) { // has preference
-    localStorage.setItem('theme', themes.LIGHT)
+if(!getTheme()) {
+    localStorage.setItem('theme', themes.DARK)
 }
 
 function changePreference(theme) {

@@ -20,6 +20,8 @@ $fourth: #CFCCE5;
 
 $main-filter-color: invert(26%) sepia(87%) saturate(3581%)
   hue-rotate(241deg) brightness(99%) contrast(94%);
+$white-filter: invert(100%) sepia(7%) saturate(7493%)
+hue-rotate(291deg) brightness(105%) contrast(112%);
 
 html[data-theme] {
 
@@ -32,6 +34,8 @@ html[data-theme] {
 
     --theme-background: #242B3B;
     --welcome-back-color: #E8E8E8;
+    --details-color: #171f32;
+    --details-hover-color: #354262;
   }
 
   &[data-theme="light"] {
@@ -43,6 +47,9 @@ html[data-theme] {
 
     --theme-background: #F7F7F7;
     --welcome-back-color: #656565;
+
+    --details-color: #e2e2e2;
+    --details-hover-color: #e7e7e7;
   }
 }
 /* END COLORS */
@@ -64,7 +71,17 @@ body {
   background: var(--background-color);
   color: var(--text-color);
 
+  width: 100%;
+  height: 100%;
+
   display: flex;
+}
+
+div#root {
+  width: 100%;
+  height: 100%;
+
+  padding-left: 21em;
 }
 
 a {
@@ -79,9 +96,41 @@ a {
 @import "utils/_theme";
 @import "utils/_notification";
 @import "utils/_icons";
+@import "utils/_alert";
+@import "utils/_autocompleter";
 
-@import "component/profile";
+@import "layout";
+
+/* TOOLS */
+@import "component/tools/coding";
+
+/* FOLDERS COMPONENT */
+@import "component/folders/addFileModal";
+@import "component/folders/addFolderModal";
+@import "component/folders/choiceModal";
+
+/* COMPONENT */
 @import "component/home";
+@import "component/login";
 
-@import "login";
+@import "component/settings";
+@import "component/links";
+@import "component/files";
 /* END IMPORTS */
+
+/* OVERFLOW */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: $main;
+  border: 2px solid var(--theme-background);
+  border-radius: 100px;
+}
+/* END OVERFLOW */

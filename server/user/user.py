@@ -1,7 +1,6 @@
 from enum import Enum
-from folders.folder import Folder
+from content.folder import Folder
 
-import json
 import bcrypt
 import calendar
 import jwt
@@ -10,11 +9,13 @@ import time
 from database.database import Selector
 from helpers.dotenv import get_env
 
+TABLE_NAME = 'users'
+
 
 class User(Selector):
 
     def __init__(self, data):
-        super().__init__('users')
+        super().__init__(TABLE_NAME)
 
         if isinstance(data, int):
             self._data = self.get_all([('user_id', data)]).fetchone()
@@ -25,6 +26,10 @@ class User(Selector):
             self._data = data
 
     def create(self):
+        """
+        Create user account
+        @return: encoded user id
+        """
         user_id = self.insert([
             ('username', f'{self._data["surname"]}.{self._data["name"]}'),
             ('surname', self._data['surname']),
@@ -36,13 +41,12 @@ class User(Selector):
         ])
         return User.encode(user_id)
 
-    def delete_by_id(self):
-        return self.delete(['*'], [('user_id', self._data)])
-
-    def update_by_id(self, selector: list):
-        return self.update(selector, [('user_id', self._data)])
-
-    def get_folders(self, folder_id):
+    def get_folder(self, folder_id: int):
+        """
+        Getting a folder content by id
+        @param folder_id: folderId (1=root folder)
+        @return: list of folders
+        """
         return [Folder(data).to_json for data in
                 self.get_join(['folders.folder_id', 'folders.name', 'required_permission',
                                'folders.user_id', 'folders.created_at'],
@@ -63,6 +67,10 @@ class User(Selector):
             "created_at": self._data[5],
             "permission": self._data[6]
         }
+
+    @staticmethod
+    def search(query: str):
+        return [User.fetch(data).to_json for data in Selector(TABLE_NAME).get_like(query).fetchmany()]
 
     @staticmethod
     def fetch(user_data: object):

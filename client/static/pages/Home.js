@@ -17,11 +17,31 @@ class Home extends Component {
                         <div class="top__picture"></div>
                     </div>
                     <div class="right__bottom">
-                        
+                        <div class="tools__wrapper">
+                            <a to="/" class="tool">
+                                <h1>Consultez votre agenda</h1>
+                                <div class="picture agenda"></div>
+                            </a>
+                            <a to="/coder" class="tool">
+                                <h1>Entraînez-vous à coder</h1>
+                                <div class="picture code"></div>
+                            </a>
+                            <a to="/" class="tool">
+                                <h1>Consultez vos tableaux</h1>
+                                <div class="picture todolist"></div>
+                            </a>
+                        </div>
                     </div>
                 </section>
-                <section>
+                <section class="last__files">
+                    <h1>Derniers ajouts</h1>
                     
+                    <div class="files">
+                        <a class="file">
+                            <span class="icon folder"></span>
+                            <p>test</p>
+                        </a>
+                    </div>
                 </section>
             </section>
         `

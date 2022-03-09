@@ -15,7 +15,10 @@
 
   @each $icon in (
     "news", "settings", "sun", "moon",
-    "links", "multiple-folders", "sign-out"
+    "links", "multiple-folders", "sign-out",
+    "folder", "add", "document", "more",
+    "download", "pdf", "check", "cross", "pencil", "info",
+    "folder-open", "image", "user", "users", "archive", "tool"
   ) {
     &.#{$icon} {
       background: url("../images/icons/#{$icon}.svg");

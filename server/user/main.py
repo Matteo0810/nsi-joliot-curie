@@ -32,10 +32,9 @@ def add():
     user_data = User.decode(request.headers.get('Authorization'))
     if not isinstance(user_data, dict):
         return user_data
-    if User.has_permission(user_data):
-        User(request.json).create()
-        return {"status": 200, "message": 'Utilisateur ajouté.'}
-    return {"status": 403, "message": "Vous n'avez pas la permission."}
+    User(request.json).create()
+    return {"status": 200, "message": 'Utilisateur ajouté.'}
+    # return {"status": 403, "message": "Vous n'avez pas la permission."}
 
 
 @user.route('/delete/<user_id>', methods=['DELETE'])
@@ -44,7 +43,7 @@ def delete(user_id):
     if not isinstance(user_data, dict):
         return user_data
     if User.has_permission(user_data, user_id):
-        User(user_id).delete_by_id()
+        User(user_id).delete([('user_id', user_id)])
         return {"status": 200, "message": 'Utilisateur supprimé.'}
     return {"status": 403, "message": "Vous n'avez pas la permission."}
 
@@ -57,7 +56,8 @@ def update():
         return {"status": 403, "message": "user_id introuvable."}
     if not isinstance(user_data, dict):
         return user_data
-    if User.has_permission(user_data, data['user_id']):
-        User(data['user_id']).update_by_id(data['data'])
+    user_id = data['user_id']
+    if User.has_permission(user_data, user_id):
+        User(user_id).update(data, [('user_id', user_id)])
         return {"status": 200, "message": "Utilisateur mis à jour."}
     return {"status": 403, "message": "Vous n'avez pas la permission."}

@@ -1,0 +1,84 @@
+.links__wrapper {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  &>.links {
+    background: var(--section-color);
+
+    width: 34em;
+    height: 45%;
+
+    top: calc(50% - 438px/2);
+    left: calc(50% - 211px/2);
+    position: absolute;
+
+    border-radius: 20px;
+    padding: 40px 43px;
+
+    &>h1 {
+      font-family: 'kaleko-bold', sans-serif;
+    }
+
+    &>.links__list {
+      display: grid;
+      margin: 26px 0;
+
+
+      &>.link {
+        background-size: cover !important;
+        background-position: center !important;
+
+        padding: 45px 36px;
+        border-radius: 20px;
+
+        position: relative;
+
+        text-align: center;
+        margin: 10px 16px;
+
+        transition: all .3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+          z-index: 1;
+
+          &>.filter {
+            opacity: 30%;
+          }
+        }
+
+        &>.filter {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 61%;
+          background: #000000;
+
+          transition: all .3s ease;
+
+          border-radius: 20px;
+        }
+
+        &>h1 {
+          font-family: 'kaleko-bold', sans-serif;
+          position: relative;
+          z-index: 1;
+          color: white;
+        }
+
+        @each $icon in ("capytale","tkinter") {
+          &.#{$icon} {
+            background: url(../images/links/#{$icon}.jpg);
+          }
+        }
+
+      }
+    }
+  }
+}

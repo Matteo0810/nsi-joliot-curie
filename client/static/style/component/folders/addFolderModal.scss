@@ -1,0 +1,204 @@
+.modal {
+
+  &>.name {
+    padding: 15px 20px;
+    background: var(--details-color);
+    border: none;
+    border-radius: 10px;
+    color: var(--text-color);
+  }
+
+  &>.folder_customization {
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+
+    position: relative;
+
+    &>.color_picker {
+      position: relative;
+
+      &>.color__chooser {
+        width: 121px;
+        height: 60px;
+
+        position: relative;
+        border-radius: 13px;
+        top: -14px;
+        background: var(--text-color);
+        cursor: pointer;
+
+        transition: all .3s ease;
+      }
+
+      &>.selector {
+        position: absolute;
+        padding: 10px 11px;
+        background: var(--section-color);
+        border-radius: 15px;
+        display: none;
+        z-index: 9;
+
+        &>.color {
+          width: 50px;
+          height: 50px;
+          border-radius: 11px;
+          margin: 1px 6px;
+          cursor: pointer;
+          transition: all .3s ease;
+
+          &:hover {
+            opacity: 50%;
+          }
+        }
+      }
+    }
+
+    &>.icon__selector {
+      position: absolute;
+      top: 64px;
+      right: 8%;
+      
+      background: var(--details-color);
+      padding: 10px 12px;
+      border-radius: 14px;
+      z-index: 9;
+
+      display: none;
+
+      &>.item {
+        background: var(--details-hover-color);
+        border-radius: 16px;
+        padding: 7px 17px;
+        transition: all .3s ease;
+        margin: 0 5px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 50%;
+        }
+
+        &>.icon {
+          position: relative;
+          top: 4px;
+        }
+      }
+    }
+
+    &>.selected_icon {
+      cursor: pointer;
+      margin-top: -16px;
+      margin-left: 27px;
+      background: var(--theme-background);
+      border: 5px dotted var(--details-color);
+      border-radius: 15px;
+      position: relative;
+
+      width: 88px;
+      height: 63px;
+
+      display: grid;
+      align-items: center;
+      justify-items: center;
+
+      &>.icon {
+        position: absolute;
+        top: 7px;
+      }
+    }
+  }
+
+  &>h4 {
+    color: var(--welcome-back-color);
+    font-weight: normal;
+    margin: 19px 0;
+    font-size: 17px;
+  }
+
+  &>.permission__list {
+    background: var(--details-color);
+    margin-top: 17px;
+    padding: 20px 22px;
+    border-radius: 10px;
+
+    border-spacing: 9px;
+
+    max-height: 10em;
+    overflow: auto;
+
+    & tr {
+      font-family: 'montserrat-bold', sans-serif;
+      text-transform: capitalize;
+
+      &>th {
+        padding: 10px 13px;
+        text-align: initial;
+      }
+
+      &>td {
+        padding: 10px 10px;
+        color: var(--welcome-back-color);
+        border-radius: 6px;
+        text-align: center;
+
+        &>input[type="checkbox"] {
+          display: none;
+        }
+
+        &>input[type="checkbox"]:checked + label {
+          background: var(--section-color);
+
+          &::before, &::after {
+            opacity: 1;
+          }
+        }
+
+        &>label {
+          background: var(--background-color);
+          border-radius: 6px;
+          padding: 6px 16px;
+          cursor: pointer;
+          transition: all .2s ease;
+          position: relative;
+          border: 2px solid var(--details-hover-color);
+
+          &::before, &::after {
+            content: '';
+            position: absolute;
+            background: var(--welcome-back-color);
+            border-radius: 20px;
+            height: 3px;
+
+            transition: all .2s ease;
+
+            opacity: 0;
+          }
+
+          &::before {
+            width: 11px;
+
+            bottom: 11px;
+            left: 6px;
+            transform: rotate(45deg);
+          }
+
+          &::after {
+            width: 16px;
+
+            transform: rotate(132deg);
+            bottom: 14px;
+            right: 4px;
+          }
+
+          &:hover {
+            background: var(--section-color);
+          }
+        }
+
+        &:first-child {
+          background: var(--details-hover-color);
+        }
+      }
+    }
+  }
+}

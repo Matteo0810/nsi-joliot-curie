@@ -7,16 +7,17 @@ Notification.prototype._send = function() {
     document.body.insertAdjacentHTML('beforeend', `
         <div class="notification">
             <h4>${this._title}</h4>
-            <span id="close">&times;</span>
+            <span class="close__notification">&times;</span>
         </div>
     `)
 
-    document.getElementById('close')
-        .addEventListener('click', this.close)
+    document.querySelector('.close__notification')
+        .onclick = () => this.close()
 }
 
 Notification.prototype.close = function() {
     const node = document.querySelector('.notification')
+    if(!node) return
     node.style.animation = "notification-off .3s alternate";
     setTimeout(() => node.remove(), 2.5e2)
 }

@@ -56,9 +56,13 @@ class Component {
     }
 
     _establishLinks(router) {
-        for(const link of document.querySelectorAll('a'))
-            link.addEventListener('click', () =>
-                router.switch(link.getAttribute('to')))
+        document.querySelectorAll('a').forEach(link => {
+            link.onclick = () => {
+                if(link.hasAttribute('to'))
+                    router.switch(link.getAttribute('to'))
+                        .catch(console.error)
+            }
+        })
     }
 
     _storeDataIn(element, data) {

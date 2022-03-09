@@ -1,0 +1,51 @@
+.code__wrapper {
+
+  &>.top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &>.statement {
+      width: 40em;
+      height: 70vh;
+
+      background: var(--section-color);
+    }
+
+    &>#code {
+      background: var(--section-color);
+      width: 56em;
+      height: 70vh;
+
+      resize: none;
+      padding: 26px 24px;
+
+      font-size: 13px;
+
+      border: none;
+      border-left: 5px solid var(--theme-background);
+
+      color: var(--text-color);
+      font-family: 'consolas', sans-serif;
+
+      $index: 0;
+      @each $color in (#d4d4d4, #6a9955, #dcdcaa, #ce9178) {
+        $index: $index+1;
+        &>.color_#{$index} {
+          color: $color;
+        }
+      }
+    }
+  }
+
+  &>.output {
+    display: grid;
+    justify-content: center;
+
+    width: 100%;
+    height: 30vh;
+
+    background: var(--section-color);
+    border-top: 5px solid var(--theme-background);
+  }
+}

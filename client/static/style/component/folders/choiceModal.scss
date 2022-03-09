@@ -1,0 +1,105 @@
+.modal {
+
+  &>.choice {
+    display: flex;
+
+    &>.item {
+      width: 174px;
+      height: 148px;
+      background: var(--section-color);
+
+      padding: 21px 24px;
+      margin: 0 11px;
+
+      border-radius: 10px;
+      display: grid;
+      justify-items: center;
+      align-items: center;
+
+      cursor: pointer;
+
+      position: relative;
+
+      &>.document {
+        position: absolute;
+        top: 19px;
+
+        width: 83px;
+        height: 83px;
+
+        transition: all .3s ease;
+      }
+
+      &:hover {
+        &>.document {
+          transform: rotate3d(1, 1, 0, 41deg);
+        }
+
+        &>.folder {
+
+          &>.document {
+            top: -98px;
+          }
+
+          &>.pdf {
+            top: -73px;
+            left: 30px;
+          }
+
+          &>.image {
+            top: -77px;
+            left: -70px;
+          }
+
+          &>.folder-open {
+            transform: rotate(15deg);
+          }
+        }
+      }
+
+      &>h4 {
+        position: absolute;
+        bottom: 11px;
+
+        font-family: 'montserrat-bold', sans-serif;
+        font-size: 19px;
+      }
+
+      &>.folder {
+        position: relative;
+
+        &>.icon {
+          position: absolute;
+          transition: all .3s ease;
+        }
+
+        &>.folder-open {
+          top: -54px;
+          left: -41px;
+
+          width: 83px;
+          height: 83px;
+        }
+
+        &>.image {
+          top: -26px;
+          left: -39px;
+          transform: rotate(322deg);
+        }
+
+        &>.document {
+          top: -27px;
+          left: -20px;
+          transform: rotate(4deg);
+        }
+
+        &>.pdf {
+          top: -27px;
+          left: 5px;
+          transform: rotate(26deg);
+        }
+      }
+    }
+  }
+
+}

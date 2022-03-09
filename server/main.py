@@ -2,14 +2,14 @@ from flask import Flask
 from helpers.dotenv import dotenv, get_env
 
 from user.main import user
-from folders.main import folders
+from content.main import content
 
 dotenv()
 app = Flask(__name__)
 
 
 app.register_blueprint(user, url_prefix='/user')
-app.register_blueprint(folders, url_prefix='/folders')
+app.register_blueprint(content, url_prefix='/content')
 
 
 # enable CORS just for port 3000

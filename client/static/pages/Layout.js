@@ -28,7 +28,7 @@ class Layout extends Component {
                     <button id="disconnect">
                         <span class="icon sign-out"></span></button>
             
-                    <img src="/static/images/profile.png" alt="profile" />
+                    <img src="/static/images/profile.jpg" alt="profile" />
                 </div>
             
                 <h3>${user.surname} ${user.name}</h3>
