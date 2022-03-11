@@ -7,15 +7,18 @@ const BASE_API = "http://127.0.0.1:1500",
     }
 
 async function request(path, method, query = null, data = null, contentType = "application/json") {
-    const params = new URLSearchParams(query);
-    const response = await (fetch(`${BASE_API}/${path}${query ? "?" : ""}${query ? params.toString() : ""}`, {
-        method: method,
-        headers: {
-            'Content-Type': contentType,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: !data ? data : JSON.stringify(data)
-    }))
+    const params = new URLSearchParams(query),
+        init = {
+            method: method,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        };
+    if(contentType)
+        init.headers['Content-Type'] = contentType
+    init['body'] = data && contentType === 'application/json' ? JSON.stringify(data) :
+        data && !contentType ? data : null
+    const response = await (fetch(`${BASE_API}/${path}${query ? "?" : ""}${query ? params.toString() : ""}`, init))
     return response.json()
 }
 
@@ -38,5 +41,5 @@ const getSearchResult = (query) => request(`${CONTENT}search/${query}`, Method.G
 const getFolder = (folderId) => request(`${CONTENT}${FOLDERS}/get/${folderId}`, Method.GET)
 
 /* FILES */
-const addFiles = (data) => request(`${CONTENT}${FILES}/add`, Method.POST, null, data, "multipart/form-data")
+const addFiles = (data) => request(`${CONTENT}${FILES}/add`, Method.POST, null, data, null)
 const deleteFile = (fileId) => request(`${CONTENT}${FILES}/delete/${fileId}`, Method.DELETE)

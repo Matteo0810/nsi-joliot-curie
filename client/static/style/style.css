@@ -249,6 +249,9 @@ html[data-theme][data-theme=light] .themes > .fill {
 .icon.tool {
   background: url("../images/icons/tool.svg");
 }
+.icon.box {
+  background: url("../images/icons/box.svg");
+}
 
 .alert__modal {
   background: var(--section-color);
@@ -798,7 +801,7 @@ html[data-theme][data-theme=light] .themes > .fill {
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.modal > .folder_customization > .color_picker > .selector {
+.modal > .folder_customization > .color_picker > .colors__selector {
   position: absolute;
   padding: 10px 11px;
   background: var(--section-color);
@@ -806,7 +809,7 @@ html[data-theme][data-theme=light] .themes > .fill {
   display: none;
   z-index: 9;
 }
-.modal > .folder_customization > .color_picker > .selector > .color {
+.modal > .folder_customization > .color_picker > .colors__selector > .color {
   width: 50px;
   height: 50px;
   border-radius: 11px;
@@ -815,10 +818,10 @@ html[data-theme][data-theme=light] .themes > .fill {
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.modal > .folder_customization > .color_picker > .selector > .color:hover {
+.modal > .folder_customization > .color_picker > .colors__selector > .color:hover {
   opacity: 50%;
 }
-.modal > .folder_customization > .icon__selector {
+.modal > .folder_customization > .icons__selector {
   position: absolute;
   top: 64px;
   right: 8%;
@@ -828,7 +831,7 @@ html[data-theme][data-theme=light] .themes > .fill {
   z-index: 9;
   display: none;
 }
-.modal > .folder_customization > .icon__selector > .item {
+.modal > .folder_customization > .icons__selector > .item {
   background: var(--details-hover-color);
   border-radius: 16px;
   padding: 7px 17px;
@@ -837,10 +840,10 @@ html[data-theme][data-theme=light] .themes > .fill {
   margin: 0 5px;
   cursor: pointer;
 }
-.modal > .folder_customization > .icon__selector > .item:hover {
+.modal > .folder_customization > .icons__selector > .item:hover {
   opacity: 50%;
 }
-.modal > .folder_customization > .icon__selector > .item > .icon {
+.modal > .folder_customization > .icons__selector > .item > .icon {
   position: relative;
   top: 4px;
 }
@@ -877,8 +880,11 @@ html[data-theme][data-theme=light] .themes > .fill {
   padding: 20px 22px;
   border-radius: 10px;
   border-spacing: 9px;
-  max-height: 10em;
+}
+.modal > .permission__list > tbody {
   overflow: auto;
+  max-height: 12em;
+  display: block;
 }
 .modal > .permission__list tr {
   font-family: "montserrat-bold", sans-serif;
@@ -886,7 +892,6 @@ html[data-theme][data-theme=light] .themes > .fill {
 }
 .modal > .permission__list tr > th {
   padding: 10px 13px;
-  text-align: initial;
 }
 .modal > .permission__list tr > td {
   padding: 10px 10px;
@@ -942,6 +947,9 @@ html[data-theme][data-theme=light] .themes > .fill {
 }
 .modal > .permission__list tr > td:first-child {
   background: var(--details-hover-color);
+}
+.modal > button#createFolder {
+  margin: 1em 8em -1em;
 }
 
 .modal > .choice {
@@ -1132,7 +1140,7 @@ html[data-theme][data-theme=light] .themes > .fill {
 .home > section.last__files {
   background: var(--section-color);
   width: 24em;
-  height: 71.5vh;
+  height: 64vh;
   margin-left: 35px;
   border-radius: 20px;
 }
@@ -1755,6 +1763,7 @@ html[data-theme][data-theme=light] .themes > .fill {
 
 ::-webkit-scrollbar-track {
   background: var(--theme-background);
+  border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb {

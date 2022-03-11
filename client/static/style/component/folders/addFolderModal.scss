@@ -31,7 +31,7 @@
         transition: all .3s ease;
       }
 
-      &>.selector {
+      &>.colors__selector {
         position: absolute;
         padding: 10px 11px;
         background: var(--section-color);
@@ -54,7 +54,7 @@
       }
     }
 
-    &>.icon__selector {
+    &>.icons__selector {
       position: absolute;
       top: 64px;
       right: 8%;
@@ -123,8 +123,11 @@
 
     border-spacing: 9px;
 
-    max-height: 10em;
-    overflow: auto;
+    &>tbody {
+      overflow: auto;
+      max-height: 12em;
+      display: block;
+    }
 
     & tr {
       font-family: 'montserrat-bold', sans-serif;
@@ -132,7 +135,6 @@
 
       &>th {
         padding: 10px 13px;
-        text-align: initial;
       }
 
       &>td {
@@ -200,5 +202,9 @@
         }
       }
     }
+  }
+
+  &>button#createFolder {
+    margin: 1em 8em -1em;
   }
 }

@@ -1,5 +1,6 @@
 const DEBUG = true
 
+//TODO usless...
 async function read(path, isJson = false) {
     try {
         const response = await fetch(`./static/${path}`, { method: 'GET' })
@@ -36,13 +37,41 @@ function validateForm(selector) {
     return form
 }
 
-class Alert {
+// abstract class used for global modal
+class Modal {
+
+    constructor(modalID) {
+        this._modalID = modalID
+
+        this._close = this._close.bind(this)
+        this.open = this.open.bind(this)
+    }
+
+    open() {
+        document.querySelector(`${this._modalID}>div>.close`)
+            .onclick = () => this._close()
+    }
+
+    _close() {
+        document.querySelector(`${this._modalID}>div`)
+            .style.animation = ".5s close-modal alternate"
+        setTimeout(() =>
+                document.querySelector(this._modalID).remove()
+            , 4.5e2)
+    }
+
+}
+
+// class for Alerts modal
+class Alert extends Modal {
 
     constructor(title, options = null) {
+        super('#alert__modal')
+
         this._title = title
         this._options = options
 
-        this._show()
+        this.open()
     }
 
     _hasDescription() {
@@ -60,17 +89,9 @@ class Alert {
         return ''
     }
 
-    _close() {
-        document.querySelector('.alert__modal')
-            .style.animation = ".5s close-modal alternate"
-        setTimeout(() =>
-                document.querySelector('.window__middle').remove()
-            , 4.5e2)
-    }
-
-    _show() {
+    open() {
         document.body.insertAdjacentHTML('beforeend', `
-            <div class="window__middle">
+            <div id="alert__modal" class="window__middle">
                 <div class="alert__modal">
                     <span class="close">&times;</span>
                     <h1>${this._title}</h1>
@@ -79,10 +100,6 @@ class Alert {
                 </div>
             </div>
         `)
-
-        document.querySelector('.close')
-            .addEventListener('click', () =>
-                this._close())
 
         if(this._options.actions) {
             this._options.actions.forEach(({className, callback}) => {
@@ -93,6 +110,8 @@ class Alert {
                     }
             })
         }
+
+        super.open()
     }
 
 }

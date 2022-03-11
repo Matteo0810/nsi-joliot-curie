@@ -18,7 +18,7 @@
     "links", "multiple-folders", "sign-out",
     "folder", "add", "document", "more",
     "download", "pdf", "check", "cross", "pencil", "info",
-    "folder-open", "image", "user", "users", "archive", "tool"
+    "folder-open", "image", "user", "users", "archive", "tool","box"
   ) {
     &.#{$icon} {
       background: url("../images/icons/#{$icon}.svg");

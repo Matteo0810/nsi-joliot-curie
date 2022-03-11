@@ -1,6 +1,8 @@
-class AddFileModal {
+class AddFileModal extends Modal {
 
     constructor() {
+        super('#modal_add')
+
         this.files = []
 
         this._initInput = this._initInput.bind(this)
@@ -30,21 +32,12 @@ class AddFileModal {
 
         document.getElementById('add')
             .addEventListener('click', this._send)
-        document.querySelector('#modal_add>.modal>.close')
-            .addEventListener('click', this._closeModal)
-        /*document.querySelector('.window__middle')
-            .addEventListener('click', ({ target }) => {
-                if(target.className === 'window__middle')
-                    this._closeModal()
-            })*/
+
+        super.open()
     }
 
-    _closeModal() {
-        document.querySelector('#modal_add>.modal')
-            .style.animation = ".5s close-modal alternate"
-        setTimeout(() =>
-                document.querySelector('#modal_add').remove()
-            , 4.5e2)
+    _close() {
+        super._close()
         this.files = []
     }
 
@@ -126,7 +119,7 @@ class AddFileModal {
         const result = await addFiles(formData)
         if(result.code > 400)
             return sendNotification(result.message)
-        this._closeModal()
+        this._close()
         result.files.map(file => {
             document.querySelector('.list')
                 .insertAdjacentHTML('beforeend',

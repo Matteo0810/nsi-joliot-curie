@@ -33,10 +33,14 @@ class Component {
 
     componentWillMount() {}
 
+    componentBeforeMount() {}
+
     async loadResources(router) {
         if(this.getName && this.getName !== 'login')
             await this._loadTemplate()
         else document.querySelector('.profile')?.remove()
+
+        await this.componentBeforeMount()
 
         document.getElementById('root').innerHTML =
             await router._actualRoute.render()

@@ -1,6 +1,8 @@
-class ChoiceModal {
+class ChoiceModal extends Modal {
 
     constructor() {
+        super('#choiceModal')
+
         this.addFileModal = new AddFileModal()
         this.addFolderModal = new addFolderModal()
     }
@@ -31,22 +33,13 @@ class ChoiceModal {
             </div>
         `)
 
-        document.querySelector('.close')
-            .addEventListener('click', this._closeModal)
-
         document.getElementById('open__addModal')
             .onclick = () => this.addFileModal.open()
 
         document.getElementById('open_folderModal')
             .onclick = () => this.addFolderModal.open()
-    }
 
-    _closeModal() {
-        document.querySelector('#choiceModal>.modal')
-            .style.animation = ".5s close-modal alternate"
-        setTimeout(() =>
-                document.querySelector('#choiceModal').remove()
-            , 4.5e2)
+        super.open()
     }
 
 }

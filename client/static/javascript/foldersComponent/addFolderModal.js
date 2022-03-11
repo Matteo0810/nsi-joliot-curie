@@ -1,6 +1,8 @@
-class addFolderModal {
+class addFolderModal extends Modal {
 
     constructor() {
+        super('#folderModal')
+
         this._colors = {
             "var(--text-color)": "var(--filter)",
             "#5D49F5": "invert(41%) sepia(100%) saturate(5154%) hue-rotate(239deg) brightness(95%) contrast(102%)",
@@ -8,7 +10,7 @@ class addFolderModal {
             "#b754ab": "invert(42%) sepia(23%) saturate(1422%) hue-rotate(256deg) brightness(97%) contrast(88%)",
             "#4268ad": "invert(38%) sepia(13%) saturate(2451%) hue-rotate(180deg) brightness(97%) contrast(88%)"
         }
-        this._icons = ["folder","user","users", "archive", "tool"]
+        this._icons = ["folder","user","users", "archive", "box"]
 
         this.table = ['everyone']
 
@@ -19,9 +21,7 @@ class addFolderModal {
             this._reconstructTable()
         })
 
-        this._colorSelectorOpened = false
-        this._iconSelectorOpened = false
-
+        this._selectors = { colors: false, icons: false }
         this._data = [this._colors[Object.keys(this._colors)[0]], this._icons[0]]
     }
 
@@ -36,17 +36,17 @@ class addFolderModal {
                     <div class="folder_customization">
                         <div class="color_picker">
                             <div class="color__chooser"></div>
-                            <div class="selector">
+                            <div class="colors__selector">
                                 ${Object.entries(this._colors)
                                 .map(([color, filter]) => {
-                                    return `<div color="${filter}" style="background: ${color}" class="color"></div>`
+                                    return `<div color="${filter}" style="background: ${color}" class="color item"></div>`
                                 }).join('')}
                             </div>
                         </div>
                         <div class="selected_icon">
                             <span class="icon folder"></span>
                         </div>
-                        <div class="icon__selector">
+                        <div class="icons__selector">
                             ${this._icons.map(icon => {
                                 return `<div class="item">
                                     <span class="icon ${icon}"></span>
@@ -59,107 +59,104 @@ class addFolderModal {
                     
                     <div id="auto__completer"></div>
                     <table class="permission__list"></table>
+                    
+                    <button id="createFolder">Créer</button>
                 </div>
             </div>
         `)
 
-        document.querySelector('#folderModal>.modal>.close')
-            .addEventListener('click', this._closeModal)
-
-        document.querySelector('.color__chooser')
-            .onclick = () => this.toggleColorSelector()
-        this._setColorSelector()
-
-        document.querySelector('.selected_icon')
-            .onclick = () => this.toggleIconSelector()
-        this._setIconSelector()
+        Object.entries(this.selectors).forEach(([key, value]) => {
+            document.querySelector(`.${value.selector}`)
+                .onclick = () => this._toggleSelector(key)
+            this._initSelector(key, (node) => value.callback(node))
+        })
 
         this._autoCompleter.init()
         this._reconstructTable()
+
+        super.open()
     }
 
     _reconstructTable() {
+        const tags = ['Utilisateur', 'écriture', 'écriture limitée', 'lecture']
+            .map(tag => `<th>${tag}</th>`).join('')
         document.querySelector('.permission__list')
             .innerHTML = `
-                <tr>
-                    <th>Utilisateur</th>
-                    <th>écriture</th>
-                    <th>écriture limitée</th>
-                    <th>lecture</th>
-                </tr>
-                ${this.table.map((user, index) => {
-                    return `
-                        <tr>
-                            <td>${user}</td>
-                            <td>
-                                <input type="checkbox" id="write_${index}"/>
-                                <label for="write_${index}"></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" id="limited_write_${index}" checked/>
-                                <label for="limited_write_${index}"></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" id="read_${index}"/>
-                                <label for="read_${index}"></label>
-                            </td>
-                        </tr>
-                    `
-                }).join('')}
+                <tbody>
+                    <tr>${tags}</tr>
+                    ${this.table.map((user, index) => {
+                        return `
+                            <tr>
+                                <td>${user}</td>
+                                <td>
+                                    <input type="checkbox" id="write_${index}"/>
+                                    <label for="write_${index}"></label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="limited_write_${index}" checked/>
+                                    <label for="limited_write_${index}"></label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="read_${index}"/>
+                                    <label for="read_${index}"></label>
+                                </td>
+                            </tr>
+                        `
+                    }).join('')}
+                </tbody>
             `
     }
 
-    toggleIconSelector() {
-        document.querySelector('.icon__selector')
-            .style.display = this._iconSelectorOpened ? "none" : "flex"
-        if(this._colorSelectorOpened)
-            this.toggleColorSelector()
-        this._iconSelectorOpened = !this._iconSelectorOpened
+    _toggleSelector(selector, reset=false) {
+        if(!this._selectors.hasOwnProperty(selector))
+            return console.error('selector not found.')
+        const node = document.querySelector(`.${selector}__selector`)
+        if(reset) {
+            node.style.display = "none"
+            this._selectors[selector] = false
+            return
+        }
+        let isOpened = this._selectors[selector]
+        node.style.display = isOpened ? "none" : "flex"
+        isOpened = !isOpened
+        Object.keys(this._selectors).forEach(key => {
+            if(key !== selector)
+                this._toggleSelector(key, true)
+        })
+        this._selectors[selector] = isOpened
     }
 
-    _setIconSelector() {
-        document.querySelectorAll('.icon__selector>.item')
-            .forEach(node => {
-                node.onclick = () => {
-                    const icon = node.querySelector('.icon')
+    _initSelector(name, callback) {
+        if(!name || !callback)
+            return console.error('Name or callback was not found.')
+        document.querySelectorAll(`.${name}__selector>.item`)
+            .forEach(node => node.onclick = () => callback(node))
+    }
+
+    selectors = {
+        colors: {
+            selector: 'color__chooser',
+            callback: (node) => {
+                const color = node.getAttribute('color')
+                document.querySelector('.color__chooser')
+                    .style.background = node.style.background
+                document.querySelector('.selected_icon>.icon')
+                    .style.filter = color
+                this._data[1] = color
+            }
+        },
+        icons: {
+            selector: 'selected_icon',
+            callback: (node) => {
+                const icon = node.querySelector('.icon')
                         .classList.toString().split(' ').pop(),
-                        selectedIcon = document.querySelector('.selected_icon>.icon')
+                    selectedIcon = document.querySelector('.selected_icon>.icon')
 
-                    selectedIcon.classList.remove(selectedIcon.classList.toString().split(' ').pop())
-                    selectedIcon.classList.add(icon)
-                    this._data[0] = icon
-                }
-            })
-    }
-
-    _setColorSelector() {
-        document.querySelectorAll('.selector>.color')
-            .forEach(node => {
-                node.onclick = () => {
-                    const color = node.getAttribute('color')
-                    document.querySelector('.color__chooser')
-                        .style.background = node.style.background
-                    document.querySelector('.selected_icon>.icon')
-                        .style.filter = color
-                    this._data[1] = color
-                }
-            })
-    }
-
-    toggleColorSelector() {
-        document.querySelector('.color_picker>.selector')
-            .style.display = this._colorSelectorOpened ? "none" : "flex"
-        if(this._iconSelectorOpened)
-            this.toggleIconSelector()
-        this._colorSelectorOpened = !this._colorSelectorOpened
-    }
-
-    _closeModal() {
-        document.querySelector('#folderModal>.modal')
-            .style.animation = ".5s close-modal alternate"
-        setTimeout(() =>
-                document.querySelector('#folderModal').remove()
-            , 4.5e2)
+                selectedIcon.classList.remove(selectedIcon.classList.toString().split(' ').pop())
+                selectedIcon.classList.add(icon)
+                this._data[0] = icon
+            }
+        }
     }
 
 }
