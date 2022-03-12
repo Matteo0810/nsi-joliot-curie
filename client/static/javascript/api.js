@@ -27,17 +27,17 @@ const USER = 'user',
     FOLDERS = 'folders', FILES = 'files'
 
 /* USER */
-const loginUser = (data) => request(`${USER}/login`, Method.POST, null, data)
-
 const getUser = () => request(`${USER}/get`, Method.GET)
 
 //const registerUser = (data) => request(`${USER}/add`, Method.POST, null, data)
+const loginUser = (data) => request(`${USER}/login`, Method.POST, null, data)
 const updateUser = (data) => request(`${USER}/update`, Method.PATCH, null, data)
 const deleteUser = (id) => request(`${USER}/delete/${id}`, Method.DELETE)
 
 const getSearchResult = (query) => request(`${CONTENT}search/${query}`, Method.GET)
 
 /* FOLDERS */
+const addFolder = (data) => request(`${CONTENT}${FOLDERS}/add`, Method.POST, null, data)
 const getFolder = (folderId) => request(`${CONTENT}${FOLDERS}/get/${folderId}`, Method.GET)
 
 /* FILES */

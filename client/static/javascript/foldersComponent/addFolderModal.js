@@ -71,6 +71,9 @@ class addFolderModal extends Modal {
             this._initSelector(key, (node) => value.callback(node))
         })
 
+        document.getElementById('createFolder')
+            .onclick = this._createFolder()
+
         this._autoCompleter.init()
         this._reconstructTable()
 
@@ -107,6 +110,20 @@ class addFolderModal extends Modal {
             `
     }
 
+    // return table content in array format
+    _getTableContent() {
+        const { rows } =  document.querySelector('.permission__list'),
+            result = []
+        console.log(rows)
+        for(let i =0;i<rows.length;i++) {
+            const line = []
+            for(const cell of row.cells)
+                line.push(cell.textContent)
+            result.push(line)
+        }
+        console.log(result)
+    }
+
     _toggleSelector(selector, reset=false) {
         if(!this._selectors.hasOwnProperty(selector))
             return console.error('selector not found.')
@@ -131,6 +148,15 @@ class addFolderModal extends Modal {
             return console.error('Name or callback was not found.')
         document.querySelectorAll(`.${name}__selector>.item`)
             .forEach(node => node.onclick = () => callback(node))
+    }
+
+    _createFolder() {
+        const [color, icon] = this._data,
+            name = document.getElementById('name')
+
+        console.log(color, icon)
+        this._getTableContent()
+        //const result = addFolder({})
     }
 
     selectors = {
