@@ -29,6 +29,7 @@
           font-size: 45px;
           margin: 0 49px;
         }
+
         &>h4 {
           font-family: 'kaleko-light', sans-serif;
           color: var(--welcome-back-color);
@@ -70,16 +71,17 @@
           transition: all .3s ease;
 
           &:hover {
-            transform: scale(1.1);
-            background: var(--section-color);
+            background: var(--details-color);
           }
 
           &>h1 {
-            font-family: "kaleko-bold", sans-serif;
+            font-family: 'kaleko-light', sans-serif;
             display: inline-block;
+
             position: relative;
             top: -29px;
             margin-right: 12px;
+
             font-size: 21px;
             width: 55%;
           }
@@ -131,8 +133,7 @@
           transition: all .3s ease;
 
           &:hover {
-            transform: scale(1.1);
-            background: var(--section-color);
+            background: var(--details-color);
           }
 
           &>span {

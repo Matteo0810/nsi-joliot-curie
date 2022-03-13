@@ -1,9 +1,10 @@
 class Component {
 
-    constructor(url = null, name = null, title = null) {
+    constructor(url = null, name = null, title = null, activate = null) {
         this.url = url
         this.name = name
         this.title = title
+        this.activate = activate
 
         this.state = {}
         this.props = {}
@@ -15,6 +16,10 @@ class Component {
 
     setProps(data) {
         this._storeDataIn("props", data)
+    }
+
+    get getActivateLink() {
+        return this.activate
     }
 
     get getURL() {

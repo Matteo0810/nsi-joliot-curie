@@ -11,39 +11,43 @@
   &>.top {
     width: 100%;
     height: 15%;
-    background: $main;
 
-    position: relative;
+    display: flex;
+    align-items: center;
 
-    &>img {
-      width: 103px;
-      border-radius: 100px;
+    margin: 15px 20px 0;
 
-      position: absolute;
-      top: 61%;
-      left: 36%;
+    &>.right {
+      margin-right: 3em;
+
+      &>img {
+        width: 80px;
+        border-radius: 10px;
+      }
     }
 
-    &>button {
-      color: $third;
-      background: $secondary;
+    &>.left {
 
-      position: absolute;
-      right: 29px;
-      top: 12px;
+      &>h3 {
+        &:first-child {
+          font-size: 26px;
+          font-family: 'kaleko-bold', sans-serif;
+          margin-bottom: 6px;
+        }
 
-      border: none;
-      border-radius: 100px;
-      padding: 10px 11px;
-      cursor: pointer;
+        &:last-child {
+          color: var(--welcome-back-color);
+        }
 
-      &>span {
-        position: relative;
-        top: 3px;
-        left: 4px;
 
-        filter: invert(100%) sepia(5%) saturate(6073%)
-          hue-rotate(180deg) brightness(96%) contrast(112%);
+        margin: 3px 0;
+
+        font-size: 18px;
+        font-weight: normal;
+        font-family: 'kaleko-light', sans-serif;
+
+        text-transform: capitalize;
+        letter-spacing: 3px;
       }
     }
   }
@@ -58,63 +62,40 @@
   }
 
   &>nav {
-    margin-top: 10px;
+    margin-top: -2em;
 
     &>ul {
       list-style: none;
       margin: 6em 0;
 
-      &>li {
-        margin: 2em 2em;
-        position: relative;
+      &>a {
+        font-size: 20px;
 
-        &.active {
+        &>li {
+          padding: 11px 47px;
+          border-radius: 8px;
+          margin: 2em 18px;
 
-          &>a {
-            color: $main;
+          transition: all .2s ease;
 
-            &::before {
-              display: block;
-            }
-
-            & > .icon {
-              filter: $main-filter-color;
-            }
-          }
-        }
-
-        &>a {
-          font-size: 20px;
-
-          &>.icon {
-            margin-right: 30px;
-          }
-
-          &::before {
-            content: '';
-            display: none;
-
-            position: absolute;
-            left: -28px;
-            top: 9px;
-
-            width: 6px;
-            height: 100%;
-            border-radius: 10px;
-
+          &.active, &:hover {
             background: $main;
-          }
-
-          &:hover {
-            color: $main;
+            color: white;
 
             &>.icon {
-              filter: $main-filter-color;
+              filter: $white-filter;
             }
+          }
 
-            &::before {
-              display: block;
-            }
+          &>span {
+            position: relative;
+            top: -10px;
+          }
+
+          &>.icon {
+            position: relative;
+            top: 3px;
+            left: -32px;
           }
         }
       }
@@ -122,8 +103,44 @@
   }
 
   &>.bottom {
+    border-top: 2px solid var(--theme-background);
+    padding-top: 18px;
+
     position: absolute;
-    bottom: 35px;
+    bottom: 10px;
+    left: 6px;
+
+    &>.disconnect {
+      background: var(--theme-background);
+
+      transition: all .3s ease;
+
+      padding: 13px 16px;
+      border-radius: 10px;
+      margin: 0 15px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--details-color);
+      }
+
+      &>span {
+        position: relative;
+
+        top: -7px;
+        left: 45px;
+      }
+
+      &>.icon {
+        position: relative;
+
+        top: 2px;
+        left: 5px;
+
+        width: 30px;
+        height: 30px;
+      }
+    }
 
 
     &>.themes {
@@ -131,9 +148,11 @@
       margin: 1em 1em;
 
       padding: 9px 9px;
-      border-radius: 100px;
+      border-radius: 10px;
 
       position: relative;
+
+      transition: all .3s ease;
 
       background: var(--background-color);
 
@@ -152,11 +171,17 @@
       & > div {
         display: flex;
         padding: 6px 19px 6px 17px;
-        border-radius: 100px;
+        border-radius: 10px;
 
         cursor: pointer;
         position: relative;
         z-index: 2;
+
+        transition: all .3s ease;
+
+        &:hover {
+          background: var(--section-color);
+        }
 
         &.light {
           margin-right: 20px;

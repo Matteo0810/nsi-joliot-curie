@@ -27,7 +27,7 @@ const USER = 'user',
     FOLDERS = 'folders', FILES = 'files'
 
 /* USER */
-const getUser = () => request(`${USER}/get`, Method.GET)
+const userData = request(`${USER}/get`, Method.GET)
 
 //const registerUser = (data) => request(`${USER}/add`, Method.POST, null, data)
 const loginUser = (data) => request(`${USER}/login`, Method.POST, null, data)

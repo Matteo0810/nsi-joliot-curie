@@ -1,6 +1,5 @@
 import os
 from flask import Blueprint, request
-from database.database import Selector
 
 from user.user import User
 
@@ -17,7 +16,7 @@ def add_folder():
     result = User.decode(request.headers.get('Authorization'))
     if isinstance(result, dict):
         return result
-    result = Folder(request.json)
+    result = Folder(request.json).create()
     return {"code": 200, "folder": result.to_json}
 
 
@@ -38,10 +37,12 @@ def add_files():
         isImage = name.split('.').pop() in ["png", "jpg", "gif", "wepb", "jfif"]
         directory = ("documents", "images")[isImage]
         try:
-            with open(os.path.join(f'.\\static\\{directory}', name), 'wb') as temp_file:
+            file_path = os.path.join(f'.\\static\\{directory}', name)
+            with open(file_path, 'wb') as temp_file:
                 temp_file.write(file.read())
             path = f'http://127.0.0.1:1500/static/{directory}/{name}'
-            result = File({"name": name, "path": path, "folder_id": 1, "permission": "0,0,0"}) \
+            result = File({"name": name, "file_size": os.stat(file_path).st_size,
+                           "path": path, "folder_id": 1, "permission": "0,0,0"}) \
                 .create()
             files.append(result.to_json)
         except RuntimeError:

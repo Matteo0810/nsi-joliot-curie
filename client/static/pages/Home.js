@@ -1,11 +1,12 @@
 class Home extends Component {
 
     constructor() {
-        super("/", "home", "Accueil");
+        super("/", "home",
+            "Accueil", "home");
     }
 
     async render() {
-        const user = await getUser()
+        const user = await userData
         return `
             <section class="home">
                  <section>

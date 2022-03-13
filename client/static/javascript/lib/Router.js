@@ -42,9 +42,11 @@ class Router {
         this._actualRoute.loadResources(this)
             .catch(console.error)
 
+
         window.history.pushState(null, null, path.getURL())
         document.title = `${this._defaultTitle} | 
             ${this._actualRoute.getTitle}`
+        this._updateNav()
 
         const time = Math.round(Date.now() - start)
         debug(`Page rendered in ${time} ms`)
@@ -52,6 +54,13 @@ class Router {
             console.warn('You currently have more than 40 ms of render time.')
 
         debug(`"${this._actualRoute?.getURL}" switched to "${path}"`)
+    }
+
+     _updateNav() {
+        document.querySelectorAll('nav>ul>a>li')
+            .forEach(node => node.classList.remove('active'))
+        document.querySelector(`.link__${this._actualRoute.getActivateLink}`)
+            ?.classList.add('active')
     }
 
 }

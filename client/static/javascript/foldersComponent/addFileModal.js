@@ -11,21 +11,14 @@ class AddFileModal extends Modal {
     }
 
     open() {
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="modal_add" class="window__middle">
-                <div class="modal">
-                    <span class="close">&times;</span>
-                    <h1>Ajouter des fichiers</h1>
-                    
-                    <input type="file" multiple="multiple" id="drag" />
-                    <label for="drag" class="drag__area" draggable="true">
-                        <p>Glissez-déposez ou cliquez ici</p>
-                    </label>
-                    
-                    <button id="add">Ajouter</button>
-                </div>
-            </div>
-        `)
+        this.insert(`
+            <input type="file" multiple="multiple" id="drag" />
+            <label for="drag" class="drag__area" draggable="true">
+                <p>Glissez-déposez ou cliquez ici</p>
+            </label>
+            
+            <button id="add">Ajouter</button>
+        `, 'Ajouter des fichiers')
 
         this._initInput()
         this._initDrag()

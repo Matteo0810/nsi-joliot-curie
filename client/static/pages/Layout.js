@@ -21,36 +21,53 @@ class Layout extends Component {
     }
 
     async render() {
-        const user = await getUser()
+        const user = await userData
         return `
             <section class="profile">
                 <div class="top">
-                    <button id="disconnect">
-                        <span class="icon sign-out"></span></button>
-            
-                    <img src="/static/images/profile.jpg" alt="profile" />
+                    <div class="right">
+                        <img src="/static/images/profile.jpg" alt="profile" />
+                    </div>
+                    <div class="left">
+                        <h3>${user.surname}</h3>
+                        <h3>${user.name}</h3>
+                    </div>
                 </div>
-            
-                <h3>${user.surname} ${user.name}</h3>
             
                 <nav>
                     <ul>
-                        <li class="active">
-                            <a to="/"><span class="icon news"></span> Actualités</a>
-                        </li>
-                        <li>
-                            <a to="/fichiers"><span class="icon multiple-folders"></span> Dossiers</a>
-                        </li>
-                        <li>
-                            <a to="/liens"><span class="icon links"></span> Liens</a>
-                        </li>
-                        <li>
-                            <a to="/parametres"><span class="icon settings"></span> Paramètres</a>
-                        </li>
+                        <a to="/">
+                            <li class="link__home active">
+                                <span class="icon news"></span> 
+                                <span>Actualités</span>
+                            </li>
+                        </a>
+                        <a to="/fichiers">
+                            <li class="link__files">
+                                <span class="icon multiple-folders"></span> 
+                                <span>Dossiers</span>
+                            </li>
+                        </a>
+                        <a to="/liens">
+                            <li class="link__links">
+                                <span class="icon links"></span> 
+                                <span>Liens</span>
+                            </li>
+                        </a>
+                        <a to="/parametres">
+                            <li class="link__settings">
+                                <span class="icon settings"></span> 
+                                <span>Paramètres</span>
+                            </li>
+                        </a>
                     </ul>
                 </nav>
             
                 <div class="bottom">
+                    <div id="disconnect" class="disconnect">
+                        <span class="icon sign-out"></span>
+                        <span>Déconnexion</span>
+                    </div>
                     <div class="themes">
                         <div theme="light" class="light">
                             <span class="icon sun"></span>

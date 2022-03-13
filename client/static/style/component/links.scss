@@ -10,21 +10,24 @@
     background: var(--section-color);
 
     width: 34em;
-    height: 45%;
+
+    padding: 40px 43px 9px;
 
     top: calc(50% - 438px/2);
     left: calc(50% - 211px/2);
+
     position: absolute;
 
     border-radius: 20px;
-    padding: 40px 43px;
 
     &>h1 {
       font-family: 'kaleko-bold', sans-serif;
     }
 
     &>.links__list {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
+
       margin: 26px 0;
 
 
@@ -33,12 +36,18 @@
         background-position: center !important;
 
         padding: 45px 36px;
+        margin: 10px 16px;
+
         border-radius: 20px;
 
         position: relative;
 
+        width: 12em;
+        height: 10em;
+
+        display: grid;
         text-align: center;
-        margin: 10px 16px;
+        align-items: center;
 
         transition: all .3s ease;
 
@@ -47,7 +56,7 @@
           z-index: 1;
 
           &>.filter {
-            opacity: 30%;
+            opacity: 40%;
           }
         }
 
@@ -55,10 +64,12 @@
           position: absolute;
           top: 0;
           left: 0;
+
           width: 100%;
           height: 100%;
-          opacity: 61%;
-          background: #000000;
+
+          opacity: 70%;
+          background: #0000006e;
 
           transition: all .3s ease;
 
@@ -72,9 +83,9 @@
           color: white;
         }
 
-        @each $icon in ("capytale","tkinter") {
-          &.#{$icon} {
-            background: url(../images/links/#{$icon}.jpg);
+        @each $thumbnail in ("capytale","tkinter","studio_code") {
+          &.#{$thumbnail} {
+            background: url(../images/links/#{$thumbnail}.jpg);
           }
         }
 

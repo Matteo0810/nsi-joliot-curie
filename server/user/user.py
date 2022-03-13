@@ -49,7 +49,7 @@ class User(Selector):
         """
         return [Folder(data).to_json for data in
                 self.get_join(['folders.folder_id', 'folders.name', 'required_permission',
-                               'folders.user_id', 'folders.created_at'],
+                               'folders.user_id', 'folders.created_at', 'folders.icon'],
                               'folders', 'user_id', [('from_folder', folder_id)]).fetchall()]
 
     @property

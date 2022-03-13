@@ -18,6 +18,7 @@ class File(Selector):
         result = self.insert([
             ('name', self._data["name"]),
             ('path', self._data["path"]),
+            ('file_size', self._data["file_size"]),
             ('folder_id', self._data["folder_id"]),
             ('required_permission', self._data["permission"]),
             ('created_at', calendar.timegm(time.gmtime()))
@@ -33,11 +34,13 @@ class File(Selector):
 
     @property
     def to_json(self):
+        print(self._data)
         return {
             "id": self._data[0],
             "name": self._data[1],
-            "path": self._data[2],
-            "folder_id": self._data[3],
-            "required_permission": self._data[4],
-            "created_at": self._data[5]
+            "file_size": self._data[2],
+            "path": self._data[3],
+            "folder_id": self._data[4],
+            "required_permission": self._data[5],
+            "created_at": self._data[6]
         }

@@ -1,7 +1,8 @@
 class Links extends Component {
 
     constructor() {
-        super("/liens", "links", "Liens");
+        super("/liens", "links",
+            "Liens", "links");
     }
 
     render() {
@@ -22,6 +23,12 @@ class Links extends Component {
                         class="link tkinter">
                          <div class="filter"></div>
                          <h1>Tkinter</h1>
+                    </a>
+                    <a href="https://code.visualstudio.com/"
+                        target="_blank"
+                        class="link studio_code">
+                         <div class="filter"></div>
+                         <h1>Visual Studio Code</h1>
                     </a>
                 </div>
               </div>

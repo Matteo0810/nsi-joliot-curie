@@ -1,0 +1,36 @@
+.modal {
+
+  &>h3.info {
+    font-weight: normal;
+    color: var(--welcome-back-color);
+    background: var(--section-color);
+
+    padding: 17px 22px;
+    margin: 0 -38px;
+
+    $border-size: 10px;
+
+    &:nth-child(3) {
+      border-top-right-radius: $border-size;
+      border-top-left-radius: $border-size;
+      margin-top: -17px;
+    }
+
+    &:last-child {
+      border-bottom-right-radius: $border-size;
+      border-bottom-left-radius: $border-size;
+      margin-bottom: -27px;
+    }
+
+    &:nth-child(even) {
+      background: var(--details-color);
+    }
+
+    &>span {
+      font-family: 'montserrat-bold', sans-serif;
+      color: var(--text-color);
+    }
+
+  }
+
+}

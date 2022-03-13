@@ -23,47 +23,43 @@ class addFolderModal extends Modal {
 
         this._selectors = { colors: false, icons: false }
         this._data = [this._colors[Object.keys(this._colors)[0]], this._icons[0]]
+
+        this._createFolder = this._createFolder.bind(this)
     }
 
     open() {
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="folderModal" class="window__middle">
-                <div class="modal">
-                    <span class="close">&times;</span>
-                    <h1>Ajouter un dossier</h1>
-                    
-                   <input class="name" id="name" placeholder="Nom du dossier" />
-                    <div class="folder_customization">
-                        <div class="color_picker">
-                            <div class="color__chooser"></div>
-                            <div class="colors__selector">
-                                ${Object.entries(this._colors)
-                                .map(([color, filter]) => {
-                                    return `<div color="${filter}" style="background: ${color}" class="color item"></div>`
-                                }).join('')}
-                            </div>
-                        </div>
-                        <div class="selected_icon">
-                            <span class="icon folder"></span>
-                        </div>
-                        <div class="icons__selector">
-                            ${this._icons.map(icon => {
-                                return `<div class="item">
-                                    <span class="icon ${icon}"></span>
-                                </div>`
+        this.insert(`
+
+           <input class="name" id="name" placeholder="Nom du dossier" />
+            <div class="folder_customization">
+                <div class="color_picker">
+                    <div class="color__chooser"></div>
+                    <div class="colors__selector">
+                        ${Object.entries(this._colors)
+                            .map(([color, filter]) => {
+                                return `<div color="${filter}" style="background: ${color}" class="color item"></div>`
                             }).join('')}
-                        </div>
                     </div>
-                    
-                    <h4>Ajouter des permissions</h4>
-                    
-                    <div id="auto__completer"></div>
-                    <table class="permission__list"></table>
-                    
-                    <button id="createFolder">Créer</button>
+                </div>
+                <div class="selected_icon">
+                    <span class="icon folder"></span>
+                </div>
+                <div class="icons__selector">
+                    ${this._icons.map(icon => {
+                        return `<div class="item">
+                            <span class="icon ${icon}"></span>
+                        </div>`
+                    }).join('')}
                 </div>
             </div>
-        `)
+            
+            <h4>Ajouter des permissions</h4>
+            
+            <div id="auto__completer"></div>
+            <table class="permission__list"></table>
+            
+            <button id="createFolder">Créer</button>
+        `, 'Ajouter un dossier')
 
         Object.entries(this.selectors).forEach(([key, value]) => {
             document.querySelector(`.${value.selector}`)
@@ -72,7 +68,7 @@ class addFolderModal extends Modal {
         })
 
         document.getElementById('createFolder')
-            .onclick = this._createFolder()
+            .onclick = this._createFolder
 
         this._autoCompleter.init()
         this._reconstructTable()
@@ -110,20 +106,6 @@ class addFolderModal extends Modal {
             `
     }
 
-    // return table content in array format
-    _getTableContent() {
-        const { rows } =  document.querySelector('.permission__list'),
-            result = []
-        console.log(rows)
-        for(let i =0;i<rows.length;i++) {
-            const line = []
-            for(const cell of row.cells)
-                line.push(cell.textContent)
-            result.push(line)
-        }
-        console.log(result)
-    }
-
     _toggleSelector(selector, reset=false) {
         if(!this._selectors.hasOwnProperty(selector))
             return console.error('selector not found.')
@@ -150,13 +132,32 @@ class addFolderModal extends Modal {
             .forEach(node => node.onclick = () => callback(node))
     }
 
-    _createFolder() {
+    async _createFolder() {
         const [color, icon] = this._data,
-            name = document.getElementById('name')
+            table = new Table('.permission__list'),
+            name = document.getElementById('name').value.trim()
 
-        console.log(color, icon)
-        this._getTableContent()
-        //const result = addFolder({})
+        if(!name) return
+
+        const { user_id } = await userData,
+        result = await addFolder({
+            name: name,
+            owner_id: user_id,
+            permission: table.toString(),
+            from_folder: 1,
+            icon: `${color};${icon}`
+        })
+
+        if(result.code>=400)
+            return sendNotification(result.message)
+
+        // TODO FIX FOLDER ADDITION
+        document.querySelector('.list')
+            .insertAdjacentHTML('beforeend',
+                new FileData(result.folder).toFile())
+
+        this._close()
+        sendNotification('Dossier ajouté !')
     }
 
     selectors = {
@@ -168,7 +169,7 @@ class addFolderModal extends Modal {
                     .style.background = node.style.background
                 document.querySelector('.selected_icon>.icon')
                     .style.filter = color
-                this._data[1] = color
+                this._data[0] = color
             }
         },
         icons: {
@@ -180,7 +181,7 @@ class addFolderModal extends Modal {
 
                 selectedIcon.classList.remove(selectedIcon.classList.toString().split(' ').pop())
                 selectedIcon.classList.add(icon)
-                this._data[0] = icon
+                this._data[1] = icon
             }
         }
     }

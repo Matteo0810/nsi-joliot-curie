@@ -96,18 +96,22 @@ a {
 @import "utils/_theme";
 @import "utils/_notification";
 @import "utils/_icons";
-@import "utils/_alert";
 @import "utils/_autocompleter";
+@import "utils/_modal.scss";
 
 @import "layout";
 
 /* TOOLS */
 @import "component/tools/coding";
 
-/* FOLDERS COMPONENT */
-@import "component/folders/addFileModal";
-@import "component/folders/addFolderModal";
-@import "component/folders/choiceModal";
+/* MODAL */
+@import "component/modals/addFileModal";
+@import "component/modals/addFolderModal";
+@import "component/modals/choiceModal";
+
+@import "component/modals/fileInfoModal";
+
+@import "component/modals/alert";
 
 /* COMPONENT */
 @import "component/home";

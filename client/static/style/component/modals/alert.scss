@@ -1,35 +1,8 @@
 .alert__modal {
-  background: var(--section-color);
-  padding: 43px 41px;
-  border-radius: 20px;
-  position: relative;
-
-  justify-content: center;
-  display: grid;
-
-  animation: .5s open-modal alternate;
-
-  &>.close {
-    background: $main;
-    padding: 4px 12px;
-    position: absolute;
-    top: -17px;
-    right: -9px;
-    font-size: 27px;
-    cursor: pointer;
-    border-radius: 100px;
-    color: white;
-    transition: all .3s ease;
-
-    &:hover {
-      transform: rotate(360deg);
-    }
-  }
 
   &>h1 {
-    font-family: 'kaleko-bold', sans-serif;
-    font-size: 23px;
-    margin-bottom: 15px;
+    font-size: 23px !important;
+    margin-bottom: 14px !important;
   }
 
   &>h4 {
@@ -76,16 +49,6 @@
         }
       }
     }
-  }
-
-  @keyframes open-modal {
-    from { transform: scale(0)  }
-    to { transform: scale(1) }
-  }
-
-  @keyframes close-modal {
-    from { transform: scale(1) }
-    to { transform: scale(0) }
   }
 
 }

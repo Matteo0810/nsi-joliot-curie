@@ -27,6 +27,10 @@ class FileActions {
                     }]
                 })
                 break;
+            case 'info':
+                const data = decodedData(node.getAttribute('file_data'))
+                new FileInfo(data).open()
+                break;
         }
     }
 
@@ -49,6 +53,34 @@ class FileActions {
 
 }
 
+class FileInfo extends Modal {
+
+    constructor(data) {
+        super('#fileInfo')
+
+        this._data = data
+    }
+
+    open() {
+        const { name, file_size, created_at } = this._data,
+            infos = [
+                { name: "Nom du fichier", data: name },
+                { name: "Taille du fichier", data:formatFileSize(file_size)},
+                { name: "Créé le", data: parseDate(created_at) },
+                { name: "Votre permission", data: "Lecture, Écriture" }
+            ]
+
+        this.insert(infos.map(({name, data}) => `
+            <h3 class="info">
+                <span>${name}</span>
+                ${data}
+            </h3>
+        `).join(''), 'Informations')
+
+        super.open()
+    }
+}
+
 class FileData {
 
     constructor(data) {
@@ -57,9 +89,11 @@ class FileData {
     }
 
     _toFolder() {
+        console.log(this._data)
+        const [color, icon] = this._data.icon.split(';')
         return `
             <a to="/fichiers/${this._data.id}" class="folder">
-                <span class="icon folder"></span>
+                <span style="filter: ${color}" class="icon ${icon}"></span>
                 <h1>${this._data.name}</h1>
             </a>
         `
@@ -84,13 +118,13 @@ class FileData {
                         <li id="modify"><span class="icon pencil"></span>Modifier</li>
                         <a href="${this._data.path}"  download="${this._data.name}" target="_blank" id="download"><span class="icon download"></span>Télécharger</a>
                         <li id="delete"><span class="icon cross"></span> Supprimer</li>
-                        <li id="info"><span class="icon info"></span>Infos</li>
+                        <li file_data="${encodeData(this._data)}" id="info"><span class="icon info"></span>Infos</li>
                     </ul>
                 </div>
                 <span class="icon ${icon}"></span>
                 <div class="details">
                     <h1>${this._data.name.length > MAX_LENGTH ?
-            this._data.name.slice(0, MAX_LENGTH-7).concat(extension) : this._data.name}</h1>
+                        this._data.name.slice(0, MAX_LENGTH-8).concat(`.${extension}`) : this._data.name}</h1>
                 </div>
             </div>
         `

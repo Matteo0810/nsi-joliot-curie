@@ -10,6 +10,22 @@ async function read(path, isJson = false) {
     }
 }
 
+function parseDate(timestamp) {
+    const date = new Date(timestamp*1000);
+    return `${date.toLocaleDateString()} à ${formatHours(date)}`
+}
+
+function formatHours(date) {
+    const hours = formatUnit(date.getHours()),
+        minutes = formatUnit(date.getMinutes()),
+        seconds = formatUnit(date.getSeconds());
+    return `${hours}:${minutes}:${seconds}`
+}
+
+function formatUnit(unit) {
+    return unit < 10 ? `0${unit}` : unit
+}
+
 function debug(message) {
     if(DEBUG)
         return console.log(`[DEBUG] <${new Date().toLocaleString().split(', ')
@@ -37,6 +53,49 @@ function validateForm(selector) {
     return form
 }
 
+function encodeData(data) {
+    return encodeURI(JSON.stringify(data))
+}
+
+function decodedData(data) {
+    return JSON.parse(decodeURI(data))
+}
+
+function formatFileSize(bytes) {
+    if(bytes === 0)
+        return '0 Byte';
+    const k = 1000,
+        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+class Table {
+
+    constructor(selector) {
+        this._rows = document.querySelector(selector).rows
+    }
+
+    toJSON() {
+        const result = []
+        for(let i = 0;i < this._rows.length; i++) {
+            if(i === 0) continue
+            const row = this._rows[i], line = []
+            for(const cell of row.cells) {
+                const input = cell.querySelector('input')
+                line.push(!input ? cell.textContent : input.checked)
+            }
+            result.push(line)
+        }
+        return result
+    }
+
+    toString() {
+        return encodeData(this.toJSON())
+    }
+
+}
+
 // abstract class used for global modal
 class Modal {
 
@@ -48,8 +107,21 @@ class Modal {
     }
 
     open() {
-        document.querySelector(`${this._modalID}>div>.close`)
+        document.querySelector(`${this._modalID} .close`)
             .onclick = () => this._close()
+    }
+
+    insert(htmlContent, title) {
+        const modalId = this._modalID.replace(/^#/g, '')
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="${modalId}" class="window__middle">
+                <div class="modal">
+                    <span class="close">&times;</span>
+                    <h1>${title}</h1>
+                    ${htmlContent}
+                </div>
+            </div>
+        `)
     }
 
     _close() {
@@ -62,7 +134,6 @@ class Modal {
 
 }
 
-// class for Alerts modal
 class Alert extends Modal {
 
     constructor(title, options = null) {
@@ -90,16 +161,13 @@ class Alert extends Modal {
     }
 
     open() {
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="alert__modal" class="window__middle">
-                <div class="alert__modal">
-                    <span class="close">&times;</span>
-                    <h1>${this._title}</h1>
-                    ${this._hasDescription()}
-                    ${this._setActions()}
-                </div>
-            </div>
-        `)
+        this.insert(`
+            ${this._hasDescription()}
+            ${this._setActions()}
+        `, this._title)
+
+        document.querySelector(`${this._modalID}>.modal`)
+            .classList.add('alert__modal')
 
         if(this._options.actions) {
             this._options.actions.forEach(({className, callback}) => {

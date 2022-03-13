@@ -1,11 +1,12 @@
 class Settings extends Component {
 
     constructor() {
-        super("/parametres", "settings", "Paramètres");
+        super("/parametres", "settings",
+            "Paramètres", "settings");
     }
 
     async render() {
-        const user = await getUser()
+        const user = await userData
         return `
            <section class="settings__wrapper">
                 <div class="middle">
@@ -24,7 +25,7 @@ class Settings extends Component {
                         </div>
                         <p>
                             Compte créé le 
-                            <b>${new Date(user.created_at*1000).toLocaleDateString()}</b>
+                            <b>${parseDate(user.created_at)}</b>
                         </p>
                     </div>
                 </div>

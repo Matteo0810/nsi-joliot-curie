@@ -1,7 +1,8 @@
 class Folders extends Component {
 
     constructor() {
-        super("/fichiers", "folders", "Fichiers");
+        super("/fichiers", "folders",
+            "Fichiers", "files");
 
         this.choiceModal = new ChoiceModal()
     }
@@ -20,10 +21,10 @@ class Folders extends Component {
 
     async render() {
         const FILE_ID = this.state.id,
-            { folders } = await getFolder(FILE_ID);
-        let files = folders;
-        if(files.length > 0)
-            files = folders.filter(({id}) => id === FILE_ID).pop().files
+            { folders } = await getFolder(FILE_ID),
+            files = folders.length > 0 ?
+                folders.filter(({id}) => id === FILE_ID).pop().files : folders
+
         return `
             <section class="files__section">
                 <div class="files__list">
