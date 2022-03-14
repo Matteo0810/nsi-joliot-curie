@@ -428,8 +428,6 @@ html[data-theme][data-theme=light] .themes > .fill {
 .profile > .top > .left > h3 {
   margin: 3px 0;
   font-size: 18px;
-  font-weight: normal;
-  font-family: "kaleko-light", sans-serif;
   text-transform: capitalize;
   letter-spacing: 3px;
 }
@@ -453,7 +451,7 @@ html[data-theme][data-theme=light] .themes > .fill {
 }
 .profile > nav > ul {
   list-style: none;
-  margin: 6em 0;
+  margin: 4em 0;
 }
 .profile > nav > ul > a {
   font-size: 20px;
@@ -1109,7 +1107,7 @@ html[data-theme][data-theme=light] .themes > .fill {
   background: var(--details-color);
 }
 .home > section > .right__bottom > .tools__wrapper > a > h1 {
-  font-family: "kaleko-light", sans-serif;
+  font-family: "montserrat-medium", sans-serif;
   display: inline-block;
   position: relative;
   top: -29px;

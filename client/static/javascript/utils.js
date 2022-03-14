@@ -173,7 +173,8 @@ class Alert extends Modal {
             this._options.actions.forEach(({className, callback}) => {
                 document.getElementById(`action__${className}`)
                     .onclick = () => {
-                        callback()
+                        if(callback)
+                            callback()
                         this._close()
                     }
             })
