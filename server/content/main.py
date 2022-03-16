@@ -25,7 +25,7 @@ def get_folder(folder_id: int):
     result = User.decode(request.headers.get('Authorization'))
     if isinstance(result, dict):
         return result
-    return {"folders": result.get_folder(folder_id)}
+    return result.get_folder(folder_id)
 
 
 # FILES PART

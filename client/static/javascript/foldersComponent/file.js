@@ -89,11 +89,11 @@ class FileData {
     }
 
     _toFolder() {
-        console.log(this._data)
-        const [color, icon] = this._data.icon.split(';')
+        const custom = FolderCustomization.from(this._data.icon)
         return `
             <a to="/fichiers/${this._data.id}" class="folder">
-                <span style="filter: ${color}" class="icon ${icon}"></span>
+                <span style="filter: ${custom.getColor}" 
+                    class="icon ${custom.getIcon}"></span>
                 <h1>${this._data.name}</h1>
             </a>
         `

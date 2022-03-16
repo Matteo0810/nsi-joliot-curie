@@ -44,3 +44,14 @@ class Folder(Selector):
             "icon": self._data[5],
             "files": self.get_files
         }
+
+    @staticmethod
+    def export_to_json(request):
+        """
+        @param request: SQL Request
+        @return: return a folder json otherwise it returns None type
+        """
+        response = request.fetchone()
+        if response is None:
+            return None
+        return Folder(response).to_json

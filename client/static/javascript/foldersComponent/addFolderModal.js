@@ -1,6 +1,6 @@
 class addFolderModal extends Modal {
 
-    constructor() {
+    constructor(folderId) {
         super('#folderModal')
 
         this._colors = {
@@ -22,8 +22,9 @@ class addFolderModal extends Modal {
         })
 
         this._selectors = { colors: false, icons: false }
-        this._data = [this._colors[Object.keys(this._colors)[0]], this._icons[0]]
+        this._customization = new FolderCustomization()
 
+        this._folderId = folderId
         this._createFolder = this._createFolder.bind(this)
     }
 
@@ -78,7 +79,12 @@ class addFolderModal extends Modal {
 
     _reconstructTable() {
         const tags = ['Utilisateur', 'écriture', 'écriture limitée', 'lecture']
-            .map(tag => `<th>${tag}</th>`).join('')
+            .map(tag => `<th>${tag}</th>`).join(''),
+        permissionsModels = [
+            { name: "writting", bitFlag: PERMISSION.WRITING },
+            { name: "limited_writting", bitFlag: PERMISSION.LIMITED_WRITING, checked: true },
+            { name: "read", bitFlag: PERMISSION.READ }]
+
         document.querySelector('.permission__list')
             .innerHTML = `
                 <tbody>
@@ -87,18 +93,15 @@ class addFolderModal extends Modal {
                         return `
                             <tr>
                                 <td>${user}</td>
-                                <td>
-                                    <input type="checkbox" id="write_${index}"/>
-                                    <label for="write_${index}"></label>
-                                </td>
-                                <td>
-                                    <input type="checkbox" id="limited_write_${index}" checked/>
-                                    <label for="limited_write_${index}"></label>
-                                </td>
-                                <td>
-                                    <input type="checkbox" id="read_${index}"/>
-                                    <label for="read_${index}"></label>
-                                </td>
+                                ${permissionsModels.map(({name, bitFlag, checked=false}) => {
+                                    return `
+                                       <td>
+                                           <input flag="${bitFlag}" type="checkbox" id="${name}_${index}" ${checked ? "checked":""} />
+                                           <label for="${name}_${index}"></label>
+                                       </td>
+                                    `
+                                }).join('')}
+
                             </tr>
                         `
                     }).join('')}
@@ -133,19 +136,19 @@ class addFolderModal extends Modal {
     }
 
     async _createFolder() {
-        const [color, icon] = this._data,
-            table = new Table('.permission__list'),
+        const table = new Table('.permission__list'),
             name = document.getElementById('name').value.trim()
 
-        if(!name) return
+        if(!name)
+            return console.error('\'Name\' field is empty.')
 
         const { user_id } = await userData,
         result = await addFolder({
             name: name,
             owner_id: user_id,
             permission: table.toString(),
-            from_folder: 1,
-            icon: `${color};${icon}`
+            from_folder: this._folderId,
+            icon: this._customization.toString()
         })
 
         if(result.code>=400)
@@ -164,24 +167,24 @@ class addFolderModal extends Modal {
         colors: {
             selector: 'color__chooser',
             callback: (node) => {
-                const color = node.getAttribute('color')
-                document.querySelector('.color__chooser')
-                    .style.background = node.style.background
-                document.querySelector('.selected_icon>.icon')
-                    .style.filter = color
-                this._data[0] = color
+                const attrColor = node.getAttribute('color')
+                this._customization.setColor(attrColor)
+                const color = this._customization.getColor
+
+                document.querySelector('.color__chooser').style.background = attrColor
+                document.querySelector('.selected_icon>.icon').style.filter = color
             }
         },
         icons: {
             selector: 'selected_icon',
             callback: (node) => {
-                const icon = node.querySelector('.icon')
-                        .classList.toString().split(' ').pop(),
+                const iconFrom = (selector) => selector.classList.toString().split(' ').pop(),
                     selectedIcon = document.querySelector('.selected_icon>.icon')
 
-                selectedIcon.classList.remove(selectedIcon.classList.toString().split(' ').pop())
-                selectedIcon.classList.add(icon)
-                this._data[1] = icon
+                selectedIcon.classList.remove(iconFrom(selectedIcon))
+
+                this._customization.setIcon(iconFrom(node.querySelector('.icon')))
+                selectedIcon.classList.add(this._customization.getIcon)
             }
         }
     }

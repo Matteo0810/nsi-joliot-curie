@@ -473,7 +473,8 @@ html[data-theme][data-theme=light] .themes > .fill {
 }
 .profile > nav > ul > a > li > span {
   position: relative;
-  top: -10px;
+  top: -11px;
+  font-size: 17px;
 }
 .profile > nav > ul > a > li > .icon {
   position: relative;
@@ -1532,6 +1533,7 @@ html[data-theme][data-theme=light] .themes > .fill {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   margin: 0 53px;
+  padding-bottom: 1em;
 }
 .files__section > .files__list > .list > #open__choiceModal {
   padding: 13px 18px;

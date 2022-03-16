@@ -34,7 +34,6 @@ class File(Selector):
 
     @property
     def to_json(self):
-        print(self._data)
         return {
             "id": self._data[0],
             "name": self._data[1],

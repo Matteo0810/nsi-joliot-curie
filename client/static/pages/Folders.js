@@ -3,8 +3,6 @@ class Folders extends Component {
     constructor() {
         super("/fichiers", "folders",
             "Fichiers", "files");
-
-        this.choiceModal = new ChoiceModal()
     }
 
     componentBeforeMount() {
@@ -14,6 +12,8 @@ class Folders extends Component {
     }
 
     componentWillMount() {
+        this.choiceModal = new ChoiceModal(this.state.id)
+
         document.getElementById('open__choiceModal')
             .addEventListener('click', () => this.choiceModal.open())
         new FileActions()
@@ -21,18 +21,21 @@ class Folders extends Component {
 
     async render() {
         const FILE_ID = this.state.id,
-            { folders } = await getFolder(FILE_ID),
-            files = folders.length > 0 ?
-                folders.filter(({id}) => id === FILE_ID).pop().files : folders
+            { folders, folder_data } = await getFolder(FILE_ID);
+        let files = [];
+
+        if(folders.length > 1) {
+            const currentFolder = folders.filter(({id}) => id === FILE_ID).pop()
+            if(currentFolder)
+                files = files.files
+        }
 
         return `
             <section class="files__section">
                 <div class="files__list">
                     <h1>Mes fichiers</h1>
                     <div class="path">
-                        <a to="/fichiers"><span class="root">Dossier racine</span></a>
-                        <span>&gt;</span>
-                        <a to="/fichiers"><span>test</span></a>
+                        ${this._reconstructFilePath(folder_data)}
                     </div>
                     
                     <div class="list">
@@ -54,6 +57,16 @@ class Folders extends Component {
                     </div>
                 </div>-->
             </section>
+        `
+    }
+
+    _reconstructFilePath(folder_data) {
+        return `
+            <a to="/fichiers"><span class="root">Dossier racine</span></a>
+            ${folder_data ? `
+                <span>&gt;</span>
+                <a><span>${folder_data?.name}</span></a>
+            ` : ''}
         `
     }
 

@@ -80,18 +80,103 @@ class Table {
         const result = []
         for(let i = 0;i < this._rows.length; i++) {
             if(i === 0) continue
-            const row = this._rows[i], line = []
+            const row = this._rows[i], line = {}
             for(const cell of row.cells) {
-                const input = cell.querySelector('input')
-                line.push(!input ? cell.textContent : input.checked)
+                const input = cell.querySelector('input');
+
+                if(!input) line.name = cell.textContent
+                else {
+                    if(!line.hasOwnProperty('permissions'))
+                        line.permissions = []
+                    line.permissions.push(eval(input.getAttribute('flag')))
+                }
             }
-            result.push(line)
+            result.push(Permission.from(line).exportData())
         }
         return result
     }
 
     toString() {
         return encodeData(this.toJSON())
+    }
+
+}
+
+/* PERMISSIONS */
+const PERMISSION = {
+    READ: 1<<0,
+    LIMITED_WRITING: 1<<1,
+    WRITING: 1<<2
+}
+
+class Permission {
+
+    constructor(name, permissions = PERMISSION.LIMITED_WRITING) {
+        this._name = name
+        this._permissions = permissions.reduce((p, c) => p|c)
+    }
+
+    static from(data) {
+        return new Permission(data.name, data.permissions)
+    }
+
+    hasPermission(permission) {
+        if(!Object.keys(PERMISSION).includes(permission))
+            return console.error('Permission not found.')
+        return (this._permissions & permission) === permission
+    }
+
+    exportData() {
+        return JSON.stringify({
+            name: this._name,
+            permissions: this._permissions
+        })
+    }
+
+}
+
+/* customization */
+const ICONS = ["folder","user","users","archive","box"],
+    COLORS = {
+        "var(--text-color)": "var(--filter)",
+        "#5D49F5": "invert(41%) sepia(100%) saturate(5154%) hue-rotate(239deg) brightness(95%) contrast(102%)",
+        "#c95959": "invert(44%) sepia(14%) saturate(2369%) hue-rotate(312deg) brightness(95%) contrast(81%)",
+        "#b754ab": "invert(42%) sepia(23%) saturate(1422%) hue-rotate(256deg) brightness(97%) contrast(88%)",
+        "#4268ad": "invert(38%) sepia(13%) saturate(2451%) hue-rotate(180deg) brightness(97%) contrast(88%)"
+    }
+
+class FolderCustomization {
+
+    constructor(data = [Object.keys(COLORS)[0], ICONS[0]]) {
+        this._data = data
+    }
+
+    static from(data) {
+        return new FolderCustomization(data.split(';'))
+    }
+
+    setColor(color) {
+        if(!COLORS.hasOwnProperty(color))
+            return console.error('Color not found.')
+        this._data[0] = COLORS[color]
+    }
+
+    setIcon(icon) {
+        if(!ICONS.includes(icon))
+            return console.error('Icon not found.')
+        this._data[1] = icon
+    }
+
+    get getColor() {
+        return this._data[0]
+    }
+
+    get getIcon() {
+        return this._data[1]
+    }
+
+    toString() {
+        return `${this.getColor};${this.getIcon}`
     }
 
 }

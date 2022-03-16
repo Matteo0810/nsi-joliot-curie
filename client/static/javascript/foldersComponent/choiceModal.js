@@ -1,13 +1,13 @@
 class ChoiceModal extends Modal {
 
-    constructor() {
+    constructor(folderId) {
         super('#choiceModal')
 
         this.addFileModal = new AddFileModal()
-        this.addFolderModal = new addFolderModal()
+        this.addFolderModal = new addFolderModal(folderId)
     }
 
-    open() {
+    open(id) {
         this.insert(`
             <div class="choice">
                  <div id="open_folderModal" class="item">
