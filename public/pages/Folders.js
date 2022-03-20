@@ -20,14 +20,19 @@ class Folders extends Component {
     }
 
     async render() {
-        const { files,folders } = await getFolder(this.state.id);
+        const {name,files,folders} = await getFolder(this.state.id);
+        console.log(name)
 
         return `
             <section class="files__section">
                 <div class="files__list">
                     <h1>Mes fichiers</h1>
                     <div class="path">
-                        
+                        <a to="/fichiers"><span class="root">Dossier racine</span></a>
+                        ${name !== 'root' ? `
+                            <span>&gt;</span>
+                            <a><span>${name}</span></a>
+                        ` : ''}
                     </div>
                     
                     <div class="list">
@@ -48,16 +53,6 @@ class Folders extends Component {
                     </div>
                 </div>-->
             </section>
-        `
-    }
-
-    _reconstructFilePath(folder_data) {
-        return `
-            <a to="/fichiers"><span class="root">Dossier racine</span></a>
-            ${folder_data ? `
-                <span>&gt;</span>
-                <a><span>${folder_data?.name}</span></a>
-            ` : ''}
         `
     }
 

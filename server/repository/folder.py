@@ -1,3 +1,5 @@
+from builtins import property
+
 from server.database.database import Selector
 from server.repository.file import File
 
@@ -40,19 +42,34 @@ class Folder(Selector):
         super().update(selector, [('folder_id', self._folder_id)])
 
     @property
+    def get_folders(self):
+        """
+        get folders of the folder current
+        :return: list of Folder data
+        """
+        return [Folder(data).get_infos for data in
+                self.get_all([('parent_id', self._folder_id)])
+                if data[0] != self._folder_id]
+
+    @property
     def get_files(self):
         """
         get files of a folder
-        :return: list of File
+        :return: list of File data
         """
         return [File(data).to_json for data in
                 self.get_join(File.get_selection(), 'files', 'folder_id', [('folders.folder_id', self._folder_id)])]
 
     @property
     def to_json(self):
-        self._data += (self.get_files, [])
+        self._data += (self.get_files, self.get_folders)
         return arr_to_dict(self._data, ["folder_id", "parent_id", "name", "permission_list",
                                         "created_at", "updated_at", "icon", "group_id", "files", "folders"])
+
+    @property
+    def get_infos(self):
+        return arr_to_dict(self._data, ["folder_id", "parent_id", "name", "permission_list",
+                                        "created_at", "updated_at", "icon", "group_id"])
 
     @staticmethod
     def from_(folder_id: int):

@@ -91,7 +91,7 @@ class FileData {
     _toFolder() {
         const custom = FolderCustomization.from(this._data.icon)
         return `
-            <a to="/fichiers/${this._data.id}" class="folder">
+            <a to="/fichiers/${this._data.folder_id}" class="folder">
                 <span style="filter: ${custom.getColor}" 
                     class="icon ${custom.getIcon}"></span>
                 <h1>${this._data.name}</h1>
@@ -109,7 +109,7 @@ class FileData {
             icon = extension
 
         return `
-            <div class="file" id="file__${this._data.id}">
+            <div class="file" id="file__${this._data.folder_id}">
                 <div class="more__button"> 
                     <span class="icon more"></span>
                     
