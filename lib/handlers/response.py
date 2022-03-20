@@ -1,17 +1,16 @@
 import json
 from os.path import exists
 
-from ..utils.http_types import HttpResponses 
+from ..utils.http_types import HttpResponses
 
-class Response():
 
-    def __init__(self, data, sessions):
+class Response:
+
+    def __init__(self, data):
         self.data = data
         self.headers = {}
-        self.sessions = sessions
         self.currentStatus = HttpResponses.OK
         self.statusHandled = False
-        
 
     def status(self, code: int):
         if not isinstance(code, HttpResponses):
@@ -33,11 +32,12 @@ class Response():
     def send_header(self, key: str, value: str):
         self.data.send_header(key, value)
         return self
-        
-    def send(self, data: object, type: str = None, encoded: bool = True):
+
+    def send(self, data: object, content_type: str = None, encoded: bool = True):
+        if isinstance(data, dict):
+            raise TypeError('invalid type, use json() instead.')
         self.status(self.currentStatus) \
-            .set_header("Content-type", (type, "text/plain")[not type])
-        self._store_session()
+            .set_header("Content-type", (content_type, "text/plain")[not content_type])
         if self.headers:
             for key, value in self.headers.items():
                 self.send_header(key, value)
@@ -45,13 +45,6 @@ class Response():
         self.data.wfile.write(data.encode("utf_8") if encoded else data)
         return self
 
-    def _store_session(self):
-        cookie = self.data.headers.get('Cookie')
-
-        if (not cookie) or (cookie and not self.sessions.has(cookie.split('=').pop())):
-            session = self.sessions.add()
-            self.set_header("Set-Cookie", session)
-    
     def json(self, data: dict):
         return self.send(json.dumps(data), "application/json")
 
@@ -62,5 +55,4 @@ class Response():
             path += ".html"
         if not exists(path):
             raise FileNotFoundError("HTML file not found.")
-        file = open(path, 'r', encoding="utf-8")
-        return self.send(file.read().replace('\n', ''), "text/html")
+        return self.send(bytes(open(path, 'r').read(), 'utf-8'), "text/html; charset=UTF-8", False)

@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('./database/api.db', check_same_thread=False)
+connection = sqlite3.connect('./server/database/api.db', check_same_thread=False)
 
 
 class Selector:
@@ -15,7 +15,7 @@ class Selector:
     def get_all(self, condition: list = None):
         return self.get(['*'], condition)
 
-    def get_like(self, query: str, condition: list = None):
+    def get_like(self, query: str, limit: int = 10, condition: list = None):
         return self.request(f'SELECT * FROM {self._table} '
                             f'WHERE surname LIKE \'{query}%\' OR name LIKE \'{query}%\' ', condition)
 
@@ -31,7 +31,8 @@ class Selector:
         self.request(f'DELETE FROM {self._table}', condition)
         self._connection.commit()
 
-    def update(self, selector: list, condition: list = None):
+    def update(self, selector: dict, condition: list = None):
+        selector = [(key, value) for key, value in selector.items()]
         self.request(f'UPDATE {self._table} SET {self._parse(selector, ",")}', condition)
         self._connection.commit()
 

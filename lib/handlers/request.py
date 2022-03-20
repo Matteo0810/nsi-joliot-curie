@@ -1,17 +1,14 @@
 import json
 
-from ..sessions.session import Session
-from ..sessions.sessions import Sessions
 
-class Request():
-    
-    def __init__(self, data, sessions: Sessions):
+class Request:
+
+    def __init__(self, data):
         """
             Permet de récupérer les informations d'une requête
             data: BaseHTTPRequestHandler, les informations de la requête
         """
         self.data = data
-        self.sessions = sessions
         self.headers = data.headers
         self.path: str = data.path
         self.request_type: str = data.command
@@ -21,18 +18,11 @@ class Request():
 
         self.query = self._parse_query()
         self.body = self._parse_body()
-        self.session = self._parse_session()
-
-    def _parse_session(self) -> Session:
-        cookie = self.get('Cookie')
-        if cookie:
-            return self.sessions.get(cookie.split('=').pop())
-        return Session(Sessions.random_session_id())
 
     def _parse_body(self):
         content_length = self.get('Content-Length')
         result = {}
-        
+
         if content_length:
             body = self.data.rfile.read(int(content_length))
             if body:

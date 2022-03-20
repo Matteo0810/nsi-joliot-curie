@@ -1,13 +1,14 @@
-from asita.utils.http_types import HttpMethods
+from ..utils.http_types import HttpMethods
 
-class Route():
+
+class Route:
 
     def __init__(self, path: str, request_type: HttpMethods, callback):
         self.path = path
         self.request_type = request_type
         self.callback = callback
-    
-    def get_method(self) -> str:
+
+    def get_method(self) -> HttpMethods:
         return self.request_type
 
     def get_path(self) -> str:

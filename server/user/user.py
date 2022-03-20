@@ -1,13 +1,15 @@
 from enum import Enum
-from content.folder import Folder
 
 import bcrypt
 import calendar
 import jwt
 import time
 
-from database.database import Selector
+from server.database.database import Selector
+from .group import Group
+
 from helpers.dotenv import get_env
+from helpers.utils import arr_to_dict
 
 TABLE_NAME = 'users'
 
@@ -19,7 +21,6 @@ class User(Selector):
 
         if isinstance(data, int):
             self._data = self.get_all([('user_id', data)]).fetchone()
-            return
         elif isinstance(data, str):
             self._data = self.get_all([('username', data)]).fetchone()
         else:
@@ -32,30 +33,15 @@ class User(Selector):
         """
         user_id = self.insert([
             ('username', f'{self._data["surname"]}.{self._data["name"]}'),
-            ('surname', self._data['surname']),
             ('name', self._data['name']),
+            ('surname', self._data['surname']),
             ('password', bcrypt.hashpw(bytes(self._data['password'], 'utf-8'),
                                        bcrypt.gensalt(rounds=10)).decode('utf-8')),
             ('created_at', calendar.timegm(time.gmtime())),
+            ('group_id', 1), # TODO has to be changed
             ('permission', UserPermission.DEFAULT.value)
         ])
         return User.encode(user_id)
-
-    def get_folder(self, folder_id: int):
-        """
-        Getting a folder content by id
-        @param folder_id: folderId (1=root folder)
-        @return: list of folders
-        """
-        folder_selector_list = ['folders.folder_id', 'folders.name', 'required_permission',
-                                'folders.user_id', 'folders.created_at', 'folders.icon']
-        return {
-            "folders": [Folder(data).to_json for data in
-                        self.get_join(folder_selector_list, 'folders', 'user_id',
-                                      [('from_folder', folder_id)]).fetchall()],
-            "folder_data": Folder.export_to_json(self.get_join(folder_selector_list, 'folders',
-                                                      'user_id', [('folders.folder_id', folder_id)]))
-        }
 
     @property
     def has_data(self):
@@ -63,15 +49,11 @@ class User(Selector):
 
     @property
     def to_json(self):
-        return {
-            "user_id": self._data[0],
-            "username": self._data[1],
-            "surname": self._data[2],
-            "name": self._data[3],
-            "encrypted_password": self._data[4],
-            "created_at": self._data[5],
-            "permission": self._data[6]
-        }
+        result = arr_to_dict(self._data,
+                           ["user_id", "username", "name", "surname", "password",
+                            "created_at", "group", "permission"])
+        result['group'] = Group.from_(result['group']).to_json
+        return result
 
     @staticmethod
     def search(query: str):
@@ -104,11 +86,6 @@ class User(Selector):
         hashed_password = bytes(hashed_password, 'utf-8')
         password = bytes(password, 'utf-8')
         return bcrypt.checkpw(password, hashed_password)
-
-    @staticmethod
-    def has_permission(data, user_id=None):
-        return data['permission'] == (UserPermission.ADMIN.value or UserPermission.MOD.value) \
-               or (user_id is not None and data['id'] == user_id)
 
 
 class UserPermission(Enum):

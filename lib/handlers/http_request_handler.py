@@ -1,27 +1,30 @@
 from http.server import BaseHTTPRequestHandler
 import traceback
 
-from ..sessions.sessions import Sessions
+from helpers.dotenv import get_env
 from ..utils.http_types import HttpMethods, HttpResponses
 
 from .request import Request
 from .response import Response
 
-sessions = Sessions()
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
 
     def __init__(self, routes, asset_directory, *args):
-        global sessions
 
         self.routes = routes
-        self.sessions = sessions
         self.asset_directory = asset_directory
         BaseHTTPRequestHandler.__init__(self, *args)
 
+    def end_headers(self):
+        self.send_header('Access-Control-Allow-Origin', get_env('CORS'))
+        self.send_header('Access-Control-Allow-Methods', '*')
+        self.send_header('Access-Control-Allow-Headers', '*')
+        return super(HttpRequestHandler, self).end_headers()
+
     def do_GET(self):
         result = self._is_asset()
-        response = Response(self, self.sessions)
+        response = Response(self)
 
         if result:
             data, type, encoded = result
@@ -45,17 +48,17 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self._handle_route(HttpMethods.OPTIONS)
-    
-    def _handle_route(self, method, response = None):
-        response = response or Response(self, self.sessions)
+
+    def _handle_route(self, method, response=None):
+        response = response or Response(self)
         path = self.path.split('?')[0]
 
-        try: 
+        try:
             for route in self.routes:
                 if route['path'] == path:
                     route = route['route']
                     if route and (route.has_method(method) or route.has_method(HttpMethods.ALL)):
-                        return route.handle(Request(self, self.sessions), response)
+                        return route.handle(Request(self), response)
             return response.status(HttpResponses.NOT_FOUND) \
                 .send(f'Cannot {method.value} {path}')
         except Exception:
@@ -68,9 +71,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 path = path.replace('\\', '/')
                 path = self.asset_directory['directory'] + path
                 type = path.split('.').pop()
-                
-                if type in ['png', 'jpg', 'gif', 'jfif', 'wepb', 'svg']:
-                    return (bytearray(open(path, 'rb').read()), f'image/{type}', False)
-                return (open(path, 'r').read(), f"text/{type}", True)
+
+                if type in get_env("ACCEPTED_FILES"):
+                    return bytearray(open(path, 'rb').read()), f'image/{type}{("", "+xml")[type=="svg"]}', False
+                elif type in get_env("ACCEPTED_FONTS"):
+                    return bytearray(open(path, 'rb').read()), f'font/{type}', False
+                return open(path, 'r').read(), f"text/{type}", True
             return False
         return False

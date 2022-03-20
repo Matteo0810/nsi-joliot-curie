@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class HttpResponses(Enum):
     UNAUTHORIZED = 401
     FORBIDDEN = 403
@@ -10,6 +11,7 @@ class HttpResponses(Enum):
     NO_CONTENT = 204
 
     INTERNAL_SERVER_ERROR = 500
+
 
 class HttpMethods(Enum):
     GET = "GET"
