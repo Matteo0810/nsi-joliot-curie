@@ -1,10 +1,10 @@
-class FileActions {
+class FileInteractions {
 
     constructor() {
-        this.setActions()
+        this.reload()
     }
 
-    _handleAction(node) {
+    _handle(node) {
         const { id } = node,
             fileId = parseInt(node.parentNode.getAttribute('file'))
         switch(id) {
@@ -34,7 +34,7 @@ class FileActions {
         }
     }
 
-    setActions() {
+    reload() {
         document.querySelectorAll('.more__button')
             .forEach(node => {
                 node.onclick = () => {
@@ -43,7 +43,7 @@ class FileActions {
                     selector.querySelectorAll('li')
                         .forEach(li => {
                             li.onclick = () => {
-                                this._handleAction(li)
+                                this._handle(li)
                             }
                         })
                     selector.style.display = selector.style.display==="block"?"none":"block"
@@ -81,7 +81,7 @@ class FileInfo extends Modal {
     }
 }
 
-class FileData {
+class RepositoryElement {
 
     constructor(data) {
         this._data = data
@@ -100,20 +100,13 @@ class FileData {
     }
 
     _toFile() {
-        const extension = this._file.pop().toLowerCase(),
-            imageExtensions = ["png", "jpg"],
-            extensions = ["pdf"],
-            MAX_LENGTH = 17
-        let icon = "document"
-        if(extensions.includes(extension))
-            icon = extension
-
+        const extension = this._file.pop().toLowerCase();
         return `
-            <div class="file" id="file__${this._data.folder_id}">
+            <div class="file" id="file__${this._data.file_id}">
                 <div class="more__button"> 
                     <span class="icon more"></span>
                     
-                    <ul file="${this._data.id}" class="selector">
+                    <ul file="${this._data.file_id}" class="selector">
                         <li id="select"><span class="icon check"></span>Séléctionner</li>
                         <li id="modify"><span class="icon pencil"></span>Modifier</li>
                         <a href="${this._data.path}"  download="${this._data.name}" target="_blank" id="download"><span class="icon download"></span>Télécharger</a>
@@ -121,13 +114,30 @@ class FileData {
                         <li file_data="${encodeData(this._data)}" id="info"><span class="icon info"></span>Infos</li>
                     </ul>
                 </div>
-                <span class="icon ${icon}"></span>
+                <span class="icon ${this._getFileIcon(extension)}"></span>
                 <div class="details">
-                    <h1>${this._data.name.length > MAX_LENGTH ?
-                        this._data.name.slice(0, MAX_LENGTH-8).concat(`.${extension}`) : this._data.name}</h1>
+                    <h1>${this._formatToFileName(name, extension)}</h1>
                 </div>
             </div>
         `
+    }
+
+    _getFileIcon(extension) {
+        const imageExtensions = ["png", "jpg"],
+            extensions = ["pdf"]
+
+        let icon = "document"
+        if(extensions.includes(extension))
+            icon = extension
+        else if(imageExtensions.includes(extension))
+            icon = "image"
+        return icon
+    }
+
+    _formatToFileName(name, extension) {
+        const MAX_LENGTH = 17
+        return this._data.name.length > MAX_LENGTH ?
+                        this._data.name.slice(0, MAX_LENGTH-8).concat(`.${extension}`) : this._data.name
     }
 
     get() {

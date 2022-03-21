@@ -218,7 +218,7 @@
         }
       }
 
-      &>.folder, &>.file {
+      &>.folder, &>.file, &>.loading__content {
         background: var(--theme-background);
         margin: 20px 16px;
         padding: 17px 36px;
@@ -325,4 +325,40 @@
       }
     }
   }
+}
+
+.loading__content, .text__loading {
+  position: relative;
+  overflow: hidden;
+
+  background: var(--theme-background) !important;
+
+  &:hover {
+    background: var(--theme-background) !important;
+  }
+}
+
+.text__loading {
+    width: 50%;
+    height: 20px;
+    border-radius: 100px;
+}
+
+.loading__content::before,
+.text__loading::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-image: linear-gradient(to right, var(--theme-background) 0,
+        rgba(0,0,0,0.5) 20%, var(--theme-background) 40%,
+          var(--theme-background) 100%);
+  background-size: 450px 400px;
+  background-repeat: no-repeat;
+  animation: loading .5s linear infinite;
+}
+@keyframes loading {
+  0% { background-position: -450px 0; }
+  100% { background-position: 450px 0; }
 }

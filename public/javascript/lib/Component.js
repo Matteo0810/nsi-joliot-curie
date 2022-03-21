@@ -50,8 +50,8 @@ class Component {
         document.getElementById('root').innerHTML =
             await router._actualRoute.render()
 
-        this._establishLinks(router)
         await this.componentWillMount()
+        this._establishLinks(router)
     }
 
     async _loadTemplate() {

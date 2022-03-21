@@ -36,4 +36,4 @@ const getFolder = id => request(`${REPOSITORY}/${FOLDERS}/get`, Method.GET, { fo
 
 /* FILES */
 const addFiles = data => request(`${REPOSITORY}/${FILES}/add`, Method.POST, null, data, null)
-const deleteFile = fileId => request(`${REPOSITORY}/${FILES}/delete/${fileId}`, Method.DELETE)
+const deleteFile = id => request(`${REPOSITORY}/${FILES}/delete`, Method.DELETE, { file_id: id })

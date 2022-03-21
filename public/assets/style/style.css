@@ -1672,7 +1672,7 @@ html[data-theme][data-theme=light] .themes > .fill {
 .files__section > .files__list > .list > .file:hover {
   background: var(--theme-background) !important;
 }
-.files__section > .files__list > .list > .folder, .files__section > .files__list > .list > .file {
+.files__section > .files__list > .list > .folder, .files__section > .files__list > .list > .file, .files__section > .files__list > .list > .loading__content {
   background: var(--theme-background);
   margin: 20px 16px;
   padding: 17px 36px;
@@ -1686,17 +1686,17 @@ html[data-theme][data-theme=light] .themes > .fill {
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.files__section > .files__list > .list > .folder:hover, .files__section > .files__list > .list > .file:hover {
+.files__section > .files__list > .list > .folder:hover, .files__section > .files__list > .list > .file:hover, .files__section > .files__list > .list > .loading__content:hover {
   background: var(--details-color);
 }
-.files__section > .files__list > .list > .folder > .icon, .files__section > .files__list > .list > .file > .icon {
+.files__section > .files__list > .list > .folder > .icon, .files__section > .files__list > .list > .file > .icon, .files__section > .files__list > .list > .loading__content > .icon {
   width: 80px;
   height: 80px;
   margin-top: -14px;
   cursor: unset;
   z-index: 2;
 }
-.files__section > .files__list > .list > .folder h1, .files__section > .files__list > .list > .file h1 {
+.files__section > .files__list > .list > .folder h1, .files__section > .files__list > .list > .file h1, .files__section > .files__list > .list > .loading__content h1 {
   font-family: "montserrat-regular", sans-serif;
   margin-top: 27px;
   text-align: center;
@@ -1762,6 +1762,52 @@ html[data-theme][data-theme=light] .themes > .fill {
           transform: rotate(91deg);
 }
 
+.loading__content, .text__loading {
+  position: relative;
+  overflow: hidden;
+  background: var(--theme-background) !important;
+}
+.loading__content:hover, .text__loading:hover {
+  background: var(--theme-background) !important;
+}
+
+.text__loading {
+  width: 50%;
+  height: 20px;
+  border-radius: 100px;
+}
+
+.loading__content::before,
+.text__loading::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, var(--theme-background)), color-stop(20%, rgba(0, 0, 0, 0.5)), color-stop(40%, var(--theme-background)), to(var(--theme-background)));
+  background-image: linear-gradient(to right, var(--theme-background) 0, rgba(0, 0, 0, 0.5) 20%, var(--theme-background) 40%, var(--theme-background) 100%);
+  background-size: 450px 400px;
+  background-repeat: no-repeat;
+  -webkit-animation: loading 0.5s linear infinite;
+          animation: loading 0.5s linear infinite;
+}
+
+@-webkit-keyframes loading {
+  0% {
+    background-position: -450px 0;
+  }
+  100% {
+    background-position: 450px 0;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: -450px 0;
+  }
+  100% {
+    background-position: 450px 0;
+  }
+}
 /* END IMPORTS */
 /* OVERFLOW */
 ::-webkit-scrollbar {

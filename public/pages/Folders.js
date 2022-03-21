@@ -3,45 +3,52 @@ class Folders extends Component {
     constructor() {
         super("/fichiers", "folders",
             "Fichiers", "files");
+
+        this.fileInteractions = new FileInteractions()
     }
 
     componentBeforeMount() {
         this.setState({
-            id: this.props.params.length > 0 ? parseInt(this.props.params[0]) : 1
+            id: this.props.params.length > 0 ?
+                parseInt(this.props.params[0]) : 1
         })
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         this.choiceModal = new ChoiceModal(this.state.id)
 
         document.getElementById('open__choiceModal')
             .addEventListener('click', () => this.choiceModal.open())
-        new FileActions()
+
+        await this._loadFiles()
+    }
+
+    async _loadFiles() {
+        const {name,files,folders} = await getFolder(this.state.id)
+        document.querySelector('.loading__content').remove()
+        document.querySelector('.list')
+            .innerHTML +=
+                [...files, ...folders]
+                  .filter(({name}) => name !== 'root')
+                  .map(data => new RepositoryElement(data).get()).join('')
+        this._loadPath(name)
+        this.fileInteractions.reload()
     }
 
     async render() {
-        const {name,files,folders} = await getFolder(this.state.id);
-        console.log(name)
-
         return `
             <section class="files__section">
                 <div class="files__list">
                     <h1>Mes fichiers</h1>
                     <div class="path">
-                        <a to="/fichiers"><span class="root">Dossier racine</span></a>
-                        ${name !== 'root' ? `
-                            <span>&gt;</span>
-                            <a><span>${name}</span></a>
-                        ` : ''}
+                        <div class="text__loading"></div>
                     </div>
                     
                     <div class="list">
                         <div id="open__choiceModal">
                              <span>Ajouter un élément</span>
                         </div>
-                        ${[...files, ...folders]
-                            .filter(({name}) => name !== 'root')
-                            .map(data => new FileData(data).get()).join('')}
+                        <div class="loading__content"></div>
                     </div>
                 </div>
                 <!--<div class="files__tree">
@@ -54,6 +61,16 @@ class Folders extends Component {
                 </div>-->
             </section>
         `
+    }
+
+    _loadPath(name) {
+        const pathNode = document.querySelector('.path')
+        pathNode.innerHTML = `<a to="/fichiers"><span class="root">Dossier racine</span></a>`
+        if(name === 'root') return
+        pathNode.insertAdjacentHTML('beforeend', `
+                <span>&gt;</span>
+                <a><span>${name}</span></a>
+            `)
     }
 
 }
