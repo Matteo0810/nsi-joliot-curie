@@ -116,9 +116,9 @@ class AddFileModal extends Modal {
         result.files.map(file => {
             document.querySelector('.list')
                 .insertAdjacentHTML('beforeend',
-                    new FileData(file).toFile())
+                    new RepositoryElement(file).get())
         })
-        new FileActions()
+        new FileInteractions()
         return sendNotification(`${result.files.length} fichier(s) ajouté(s).`)
     }
 

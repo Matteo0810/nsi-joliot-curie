@@ -28,7 +28,7 @@ const loginUser = data => request(`${USER}/login`, Method.POST, null, data)
 const updateUser = data => request(`${USER}/`, Method.PATCH, null, data)
 const deleteUser = id => request(`${USER}`, Method.DELETE, { folder_id: id })
 
-const getSearchResult = query => request(`${REPOSITORY}/search/${query}`, Method.GET)
+const searchUsers = query => request(`${USER}/search`, Method.GET, {query: query})
 
 /* FOLDERS */
 const addFolder = data => request(`${REPOSITORY}/${FOLDERS}/add`, Method.POST, null, data)

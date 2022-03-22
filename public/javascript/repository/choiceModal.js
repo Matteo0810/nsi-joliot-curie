@@ -7,7 +7,7 @@ class ChoiceModal extends Modal {
         this.addFolderModal = new addFolderModal(folderId)
     }
 
-    open(id) {
+    open() {
         this.insert(`
             <div class="choice">
                  <div id="open_folderModal" class="item">

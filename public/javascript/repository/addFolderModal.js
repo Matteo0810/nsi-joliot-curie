@@ -3,15 +3,6 @@ class addFolderModal extends Modal {
     constructor(folderId) {
         super('#folderModal')
 
-        this._colors = {
-            "var(--text-color)": "var(--filter)",
-            "#5D49F5": "invert(41%) sepia(100%) saturate(5154%) hue-rotate(239deg) brightness(95%) contrast(102%)",
-            "#c95959": "invert(44%) sepia(14%) saturate(2369%) hue-rotate(312deg) brightness(95%) contrast(81%)",
-            "#b754ab": "invert(42%) sepia(23%) saturate(1422%) hue-rotate(256deg) brightness(97%) contrast(88%)",
-            "#4268ad": "invert(38%) sepia(13%) saturate(2451%) hue-rotate(180deg) brightness(97%) contrast(88%)"
-        }
-        this._icons = ["folder","user","users", "archive", "box"]
-
         this.table = ['everyone']
 
         this._autoCompleter = new AutoCompleter((node) => {
@@ -36,9 +27,9 @@ class addFolderModal extends Modal {
                 <div class="color_picker">
                     <div class="color__chooser"></div>
                     <div class="colors__selector">
-                        ${Object.entries(this._colors)
-                            .map(([color, filter]) => {
-                                return `<div color="${filter}" style="background: ${color}" class="color item"></div>`
+                        ${Object.entries(COLORS)
+                            .map(([color]) => {
+                                return `<div color="${color}" style="background: ${color}" class="color item"></div>`
                             }).join('')}
                     </div>
                 </div>
@@ -46,7 +37,7 @@ class addFolderModal extends Modal {
                     <span class="icon folder"></span>
                 </div>
                 <div class="icons__selector">
-                    ${this._icons.map(icon => {
+                    ${ICONS.map(icon => {
                         return `<div class="item">
                             <span class="icon ${icon}"></span>
                         </div>`
@@ -142,22 +133,19 @@ class addFolderModal extends Modal {
         if(!name)
             return console.error('\'Name\' field is empty.')
 
-        const { user_id } = await userData,
-        result = await addFolder({
+        const result = await addFolder({
+            parent_id: this._folderId,
             name: name,
-            owner_id: user_id,
-            permission: table.toString(),
-            from_folder: this._folderId,
+            permission_list: table.toString(),
             icon: this._customization.toString()
         })
 
         if(result.code>=400)
             return sendNotification(result.message)
 
-        // TODO FIX FOLDER ADDITION
         document.querySelector('.list')
             .insertAdjacentHTML('beforeend',
-                new FileData(result.folder).toFile())
+                new RepositoryElement(result.folder).get())
 
         this._close()
         sendNotification('Dossier ajouté !')

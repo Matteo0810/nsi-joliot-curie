@@ -18,7 +18,7 @@ class Folders extends Component {
         this.choiceModal = new ChoiceModal(this.state.id)
 
         document.getElementById('open__choiceModal')
-            .addEventListener('click', () => this.choiceModal.open())
+            .onclick = () => this.choiceModal.open()
 
         await this._loadFiles()
     }
@@ -27,10 +27,10 @@ class Folders extends Component {
         const {name,files,folders} = await getFolder(this.state.id)
         document.querySelector('.loading__content').remove()
         document.querySelector('.list')
-            .innerHTML +=
+            .insertAdjacentHTML('beforeend',
                 [...files, ...folders]
                   .filter(({name}) => name !== 'root')
-                  .map(data => new RepositoryElement(data).get()).join('')
+                  .map(data => new RepositoryElement(data).get()).join(''))
         this._loadPath(name)
         this.fileInteractions.reload()
     }

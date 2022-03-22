@@ -5,18 +5,6 @@ class Home extends Component {
             "Accueil", "home");
     }
 
-    componentWillMount() {
-        document.querySelectorAll('.unvalaible')
-            .forEach(node => {
-                node.onclick = () => {
-                    new Alert('Indisponible', {
-                        description: "Je suis désolé, cette fonction est indisponible pour le moment.",
-                        actions: [{ name: "Je comprends", className:"action__yes" }]
-                    })
-                }
-            })
-    }
-
     async render() {
         const user = await userData
         return `
@@ -31,7 +19,7 @@ class Home extends Component {
                     </div>
                     <div class="right__bottom">
                         <div class="tools__wrapper">
-                            <a to="/" class="tool unvalaible">
+                            <a to="/" class="tool">
                                 <h1>Consultez votre agenda</h1>
                                 <div class="picture agenda"></div>
                             </a>
@@ -39,7 +27,7 @@ class Home extends Component {
                                 <h1>Entraînez-vous à coder</h1>
                                 <div class="picture code"></div>
                             </a>
-                            <a to="/" class="tool unvalaible">
+                            <a to="/" class="tool">
                                 <h1>Consultez vos tableaux</h1>
                                 <div class="picture todolist"></div>
                             </a>

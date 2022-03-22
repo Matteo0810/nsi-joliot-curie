@@ -55,4 +55,4 @@ class Response:
             path += ".html"
         if not exists(path):
             raise FileNotFoundError("HTML file not found.")
-        return self.send(bytes(open(path, 'r').read(), 'utf-8'), "text/html; charset=UTF-8", False)
+        return self.send(bytes(open(path, 'r').read(), 'utf-8'), "text/html", False)

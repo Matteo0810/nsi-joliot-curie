@@ -5,7 +5,7 @@ class AutoCompleter {
     }
 
     async getResult(query) {
-       return await getSearchResult(query)
+       return await searchUsers(query)
     }
 
     init() {

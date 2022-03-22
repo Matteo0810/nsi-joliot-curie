@@ -70,12 +70,12 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 path = self.path.replace(self.asset_directory['name'], '')
                 path = path.replace('\\', '/')
                 path = self.asset_directory['directory'] + path
-                type = path.split('.').pop()
+                file_type = path.split('.').pop()
 
-                if type in get_env("ACCEPTED_FILES"):
-                    return bytearray(open(path, 'rb').read()), f'image/{type}{("", "+xml")[type=="svg"]}', False
-                elif type in get_env("ACCEPTED_FONTS"):
-                    return bytearray(open(path, 'rb').read()), f'font/{type}', False
-                return open(path, 'r').read(), f"text/{type}", True
+                if file_type in get_env("ACCEPTED_FILES"):
+                    return bytearray(open(path, 'rb').read()), f'image/{file_type}{("", "+xml")[file_type=="svg"]}', False
+                elif file_type in get_env("ACCEPTED_FONTS"):
+                    return bytearray(open(path, 'rb').read()), f'font/{file_type}', False
+                return open(path, 'rb').read(), f"text/{file_type};charset=UTF-8", False
             return False
         return False
